@@ -87,6 +87,10 @@
             margin: 0 auto;
         }
 
+        .container.mode-wide {
+            max-width: none;
+        }
+
         .toggle-selector-btn {
             display: inline-block;
             background: none;
@@ -192,10 +196,37 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 16px;
+            align-items: start;
         }
 
         #content-sections.mode-side-by-side .section {
             margin-bottom: 0;
+        }
+
+        /* Default (Scroll/Tabs): the League section is one card; its two
+           .league-column groups (Table, and Position progress + Form) just
+           stack in place, preserving the original spacing between them. */
+        #league-section > .league-column + .league-column {
+            margin-top: 20px;
+        }
+
+        /* Side-by-side only: unwrap the League section's own card so its two
+           .league-column groups become independent grid cells alongside
+           Matches / Champions League, each styled as its own card. */
+        #content-sections.mode-side-by-side #league-section {
+            display: contents;
+        }
+
+        #content-sections.mode-side-by-side #league-info-title {
+            display: none;
+        }
+
+        #content-sections.mode-side-by-side .league-column {
+            margin-top: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 22px;
         }
 
         .selector-row {
@@ -632,7 +663,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="container">
         <!-- Layout mode picker -->
         <div class="toolbar">
             <div class="layout-picker">
@@ -677,30 +708,36 @@
                 <div id="matches-list" class="empty-state">Pick a club above to see matches</div>
             </div>
 
-            <!-- League Info: table, position progress, form -->
+            <!-- League Info: table, position progress, form. In side-by-side
+                 mode this splits into 2 independent cards (.league-column);
+                 in Scroll/Tabs it's one unified "League" section. -->
             <div class="section" id="league-section">
                 <div class="section-title" id="league-info-title">League</div>
 
-                <div class="subsection">
-                    <div class="subtitle">Table</div>
-                    <div id="league-table" class="empty-state">Pick a club above to see standings</div>
-                    <div class="last-updated" id="last-updated"></div>
-                </div>
-
-                <div class="subsection">
-                    <div class="subtitle">Position progress</div>
-                    <div id="position-chart" class="empty-state position-chart-wrap">Pick a club above to see position history</div>
-                </div>
-
-                <div class="subsection">
-                    <div class="subtitle">Form</div>
-                    <div class="legend">
-                        <span class="legend-item"><span class="legend-swatch win"></span>Win</span>
-                        <span class="legend-item"><span class="legend-swatch draw"></span>Draw</span>
-                        <span class="legend-item"><span class="legend-swatch loss"></span>Loss</span>
-                        <span class="legend-item"><span class="legend-swatch"></span>Upcoming</span>
+                <div class="league-column" id="league-col-table">
+                    <div class="subsection">
+                        <div class="subtitle">Table</div>
+                        <div id="league-table" class="empty-state">Pick a club above to see standings</div>
+                        <div class="last-updated" id="last-updated"></div>
                     </div>
-                    <div id="league-form" class="empty-state">Pick a club above to see recent form</div>
+                </div>
+
+                <div class="league-column" id="league-col-position-form">
+                    <div class="subsection">
+                        <div class="subtitle">Position progress</div>
+                        <div id="position-chart" class="empty-state position-chart-wrap">Pick a club above to see position history</div>
+                    </div>
+
+                    <div class="subsection">
+                        <div class="subtitle">Form</div>
+                        <div class="legend">
+                            <span class="legend-item"><span class="legend-swatch win"></span>Win</span>
+                            <span class="legend-item"><span class="legend-swatch draw"></span>Draw</span>
+                            <span class="legend-item"><span class="legend-swatch loss"></span>Loss</span>
+                            <span class="legend-item"><span class="legend-swatch"></span>Upcoming</span>
+                        </div>
+                        <div id="league-form" class="empty-state">Pick a club above to see recent form</div>
+                    </div>
                 </div>
             </div>
 
@@ -785,11 +822,14 @@
         // Single source of truth reconciling layout mode, active tab, and
         // whether Champions League is applicable for the current club.
         function refreshLayout() {
+            const container = document.getElementById('container');
             const contentSections = document.getElementById('content-sections');
             const tabBar = document.getElementById('tab-bar');
             const clTabBtn = document.getElementById('cl-tab-btn');
 
-            contentSections.classList.toggle('mode-side-by-side', layoutMode === 'side-by-side');
+            const isSideBySide = layoutMode === 'side-by-side';
+            contentSections.classList.toggle('mode-side-by-side', isSideBySide);
+            container.classList.toggle('mode-wide', isSideBySide);
             tabBar.style.display = layoutMode === 'tabs' ? 'flex' : 'none';
             clTabBtn.style.display = clApplicable ? '' : 'none';
 
