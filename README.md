@@ -1,4 +1,4 @@
-# Football Club Widget
+<img width="1170" height="152" alt="image" src="https://github.com/user-attachments/assets/1b009fb6-c882-4f5a-a67b-9ecbc819ad7a" /># Football Club Widget
 
 <p align="center"><strong>Languages:</strong> <a href="README.md">English</a> | <a href="README.pt-BR.md">Português (Brasil)</a></p>
 
@@ -111,7 +111,7 @@ Pick one, then point `widget.html`'s `backendUrl` constant at it.
 The exact roster depends on football-data.org's current season data (promotions, relegations, name changes will shift this over time) — this is what's selectable today. Any of these clubs that's also in the Champions League this season gets the extra Champions League section automatically.
 
 <details>
-<summary><strong>Premier League</strong> (England) — 20 clubs</summary>
+<summary><strong>⚪🔴⚪ Premier League</strong> — 20 clubs</summary>
 
 <table>
 <tr><td>AFC Bournemouth</td><td>Arsenal FC</td><td>Aston Villa FC</td><td>Brentford FC</td></tr>
@@ -123,7 +123,7 @@ The exact roster depends on football-data.org's current season data (promotions,
 </details>
 
 <details>
-<summary><strong>Championship</strong> (England) — 24 clubs</summary>
+<summary><strong>⚪🔴⚪ Championship</strong> — 24 clubs</summary>
 
 <table>
 <tr><td>Birmingham City FC</td><td>Blackburn Rovers FC</td><td>Bolton Wanderers FC</td><td>Bristol City FC</td></tr>
@@ -136,7 +136,7 @@ The exact roster depends on football-data.org's current season data (promotions,
 </details>
 
 <details>
-<summary><strong>La Liga</strong> (Spain) — 20 clubs</summary>
+<summary><strong>🔴🟡🔴 La Liga</strong> — 20 clubs</summary>
 
 <table>
 <tr><td>Athletic Club</td><td>CA Osasuna</td><td>Club Atlético de Madrid</td><td>Deportivo Alavés</td></tr>
@@ -148,7 +148,7 @@ The exact roster depends on football-data.org's current season data (promotions,
 </details>
 
 <details>
-<summary><strong>Serie A</strong> (Italy) — 20 clubs</summary>
+<summary><strong>🟢⚪🔴 Serie A</strong> — 20 clubs</summary>
 
 <table>
 <tr><td>AC Milan</td><td>AC Monza</td><td>ACF Fiorentina</td><td>AS Roma</td></tr>
@@ -160,7 +160,7 @@ The exact roster depends on football-data.org's current season data (promotions,
 </details>
 
 <details>
-<summary><strong>Bundesliga</strong> (Germany) — 18 clubs</summary>
+<summary><strong>⚫🔴🟡 Bundesliga</strong> — 18 clubs</summary>
 
 <table>
 <tr><td>1. FC Köln</td><td>1. FC Union Berlin</td><td>1. FSV Mainz 05</td><td>Bayer 04 Leverkusen</td></tr>
@@ -172,7 +172,7 @@ The exact roster depends on football-data.org's current season data (promotions,
 </details>
 
 <details>
-<summary><strong>Ligue 1</strong> (France) — 18 clubs</summary>
+<summary><strong>🔵⚪🔴 Ligue 1</strong> — 18 clubs</summary>
 
 <table>
 <tr><td>AJ Auxerre</td><td>Angers SCO</td><td>AS Monaco FC</td><td>ES Troyes AC</td></tr>
@@ -184,7 +184,7 @@ The exact roster depends on football-data.org's current season data (promotions,
 </details>
 
 <details>
-<summary><strong>Eredivisie</strong> (Netherlands) — 18 clubs</summary>
+<summary><strong>🟠🟠🟠 Eredivisie</strong> — 18 clubs</summary>
 
 <table>
 <tr><td>ADO Den Haag</td><td>AFC Ajax</td><td>AZ</td><td>FC Groningen</td></tr>
@@ -196,7 +196,7 @@ The exact roster depends on football-data.org's current season data (promotions,
 </details>
 
 <details>
-<summary><strong>Primeira Liga</strong> (Portugal) — 18 clubs</summary>
+<summary><strong>🟢🔴🔴 Primeira Liga</strong> — 18 clubs</summary>
 
 <table>
 <tr><td>Académico de Viseu FC</td><td>Casa Pia AC</td><td>CD Nacional</td><td>CD Santa Clara</td></tr>
@@ -208,7 +208,7 @@ The exact roster depends on football-data.org's current season data (promotions,
 </details>
 
 <details>
-<summary><strong>Brasileirão</strong> (Brazil) — 20 clubs</summary>
+<summary><strong>🟢🟡🔵 Brasileirão</strong> — 20 clubs</summary>
 
 <table>
 <tr><td>Botafogo FR</td><td>CA Mineiro</td><td>CA Paranaense</td><td>Chapecoense AF</td></tr>
