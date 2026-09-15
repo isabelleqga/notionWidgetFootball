@@ -6,12 +6,15 @@
     <title>Football Club Widget</title>
     <style>
         :root {
-            --bg: #f5f6f8;
-            --surface: #ffffff;
-            --text: #1a1d23;
-            --text-muted: #6b7280;
-            --border: #e5e7eb;
-            --accent: #55606e;
+            /* Notion's default light-mode palette: white page background,
+               the light-gray "callout/code block" fill for cards, and
+               Notion's signature near-black text color. */
+            --bg: #ffffff;
+            --surface: #f1f1ef;
+            --text: #37352f;
+            --text-muted: #787774;
+            --border: #e9e9e7;
+            --accent: #787774;
 
             --win: #2f9e44;
             --draw: #868e96;
@@ -35,12 +38,14 @@
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg: #111214;
-                --surface: #1b1d21;
-                --text: #e8e9ec;
-                --text-muted: #9aa0aa;
-                --border: #2b2e33;
-                --accent: #aab2bd;
+                /* Notion's default dark-mode palette: the same near-black
+                   page background and subtle gray card fill Notion uses. */
+                --bg: #191919;
+                --surface: #2f2f2f;
+                --text: #e6e6e6;
+                --text-muted: #9b9b9b;
+                --border: #373737;
+                --accent: #9b9b9b;
 
                 --win: #4caf50;
                 --draw: #9298a1;
@@ -70,7 +75,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
             background: var(--bg);
             color: var(--text);
             padding: 24px;
