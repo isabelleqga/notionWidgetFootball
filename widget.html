@@ -996,7 +996,7 @@
 
                 currentTeamShortName = data.team.shortName || data.team.name;
 
-                document.getElementById('matches-title').textContent = `Matches • ${data.team.name}`;
+                document.getElementById('matches-title').textContent = `Matches • ${currentTeamShortName}`;
                 document.getElementById('league-info-title').textContent = data.league.name;
 
                 const allMatches = [
