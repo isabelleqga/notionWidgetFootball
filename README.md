@@ -96,7 +96,7 @@ Pick one, then point `widget.html`'s `backendUrl` constant at it.
 
 - Pick any club across Premier League, Championship, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, and Brasileirão
 - Last 2 results + next 2 fixtures (opponent, home/away, score or 24h kickoff time)
-- A single League section with Table (a 5-team window centered on your club, clamped at the top/bottom of the table), Position progress (color-coded by table zone: title contender / top 4 / mid-table / relegation), and Form — plus a matching Champions League section when the club is in it this season
+- A single League section with Table (a 5-team window centered on your club, clamped at the top/bottom of the table), Position progress (color-coded by table zone: title contender / top 4 / mid-table / relegation, with the position number only labeled where it changes), and Form — plus a matching Champions League section when the club is in it this season
 - Recent form as a grid of win/draw/loss/upcoming squares
 - Auto-refresh every 5 minutes
 - Club selection remembered per browser (`localStorage`); the country/club dropdowns can be hidden once you've picked a club (they default to hidden after that) and reopened anytime via the "Change club" link
