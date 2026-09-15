@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlético Madrid Live Widget</title>
+    <style>
+        :root {
+            --bg: #f5f6f8;
+            --surface: #ffffff;
+            --text: #1a1d23;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --accent: #55606e;
+
+            --win: #2f9e44;
+            --draw: #868e96;
+            --loss: #e03131;
+            --upcoming: #d5d8dc;
+            --eliminated: #24262b;
+
+            --pos-1: #1c7ed6;
+            --pos-2: #2f9e44;
+            --pos-3-4: #f2b705;
+            --pos-5plus: #e03131;
+
+            --warning-bg: #fff8e6;
+            --warning-text: #8a6300;
+            --warning-border: #f0dca3;
+
+            --error-bg: #fdecec;
+            --error-text: #b42318;
+            --error-border: #f3c6c4;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #111214;
+                --surface: #1b1d21;
+                --text: #e8e9ec;
+                --text-muted: #9aa0aa;
+                --border: #2b2e33;
+                --accent: #aab2bd;
+
+                --win: #4caf50;
+                --draw: #9298a1;
+                --loss: #ef5350;
+                --upcoming: #34373c;
+                --eliminated: #0b0c0d;
+
+                --pos-1: #4dabf7;
+                --pos-2: #4caf50;
+                --pos-3-4: #ffd43b;
+                --pos-5plus: #ef5350;
+
+                --warning-bg: #2b2410;
+                --warning-text: #e0c473;
+                --warning-border: #4a3d18;
+
+                --error-bg: #2c1615;
+                --error-text: #f28b82;
+                --error-border: #4a2523;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .club-name {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+        }
+
+        .club-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 22px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .match {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .match:last-child {
+            border-bottom: none;
+        }
+
+        .match-date {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .match-date-competition {
+            font-size: 10px;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .match-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .match-opponent {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .match-opponent .name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .score {
+            background: var(--border);
+            color: var(--text);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            min-width: 50px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .score.upcoming {
+            color: var(--text-muted);
+        }
+
+        .score.win { background: var(--win); color: #fff; }
+        .score.draw { background: var(--draw); color: #fff; }
+        .score.loss { background: var(--loss); color: #fff; }
+
+        .league-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-header {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-header th {
+            padding: 10px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .table-header th:nth-child(1) { width: 5%; }
+        .table-header th:nth-child(2) { width: 50%; }
+        .table-header th:nth-child(3) { width: 15%; }
+        .table-header th:nth-child(4) { width: 15%; }
+        .table-header th:nth-child(5) { width: 15%; }
+
+        .table-row {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .table-row td {
+            padding: 10px;
+            font-size: 13px;
+        }
+
+        .table-row.our-team {
+            background: var(--bg);
+            font-weight: 600;
+        }
+
+        .position {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .team-name {
+            color: var(--text);
+        }
+
+        .points {
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: var(--error-bg);
+            color: var(--error-text);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--error-border);
+            margin-bottom: 20px;
+        }
+
+        .last-updated {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        .api-config-needed {
+            background: var(--warning-bg);
+            color: var(--warning-text);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--warning-border);
+            margin-bottom: 20px;
+        }
+
+        .api-config-needed a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .position-chart-wrap svg {
+            display: block;
+        }
+
+        .chart-grid {
+            stroke: var(--border);
+        }
+
+        .chart-line {
+            stroke: var(--accent);
+        }
+
+        .chart-dot {
+            fill: var(--accent);
+        }
+
+        .chart-label {
+            fill: var(--text);
+            font-size: 10px;
+            font-weight: 600;
+            text-anchor: middle;
+        }
+
+        .chart-dot.pos-1 { fill: var(--pos-1); }
+        .chart-dot.pos-2 { fill: var(--pos-2); }
+        .chart-dot.pos-3-4 { fill: var(--pos-3-4); }
+        .chart-dot.pos-5plus { fill: var(--pos-5plus); }
+
+        .position-pill {
+            display: inline-block;
+            background: var(--bg);
+            color: var(--text);
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 14px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-swatch {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .squares {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .squares-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .squares-rows .squares {
+            flex-wrap: nowrap;
+        }
+
+        #cl-form {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            row-gap: 10px;
+            column-gap: 18px;
+        }
+
+        .phase-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sq,
+        .legend-swatch {
+            background: var(--upcoming);
+        }
+
+        .sq {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--text-muted);
+        }
+
+        .sq.win, .legend-swatch.win { background: var(--win); border-color: var(--win); }
+        .sq.draw, .legend-swatch.draw { background: var(--draw); border-color: var(--draw); }
+        .sq.loss, .legend-swatch.loss { background: var(--loss); border-color: var(--loss); }
+        .sq.eliminated, .legend-swatch.eliminated { background: var(--eliminated); }
+
+        .sq.win, .sq.draw, .sq.loss, .sq.eliminated {
+            color: #fff;
+        }
+
+        .phase-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="club-name">Atlético de Madrid</div>
+            <div class="club-subtitle">La Liga 2025/26</div>
+        </div>
+
+        <!-- Backend Configuration Info -->
+        <div id="api-warning" class="api-config-needed" style="display: none;">
+            <strong>Backend Not Configured:</strong> Please deploy the backend server and update the backend URL in the HTML.
+        </div>
+
+        <!-- Error Messages -->
+        <div id="error-container"></div>
+
+        <!-- Matches -->
+        <div class="section">
+            <div class="section-title">Matches</div>
+            <div id="matches-list" class="loading">
+                <div class="spinner"></div>
+                Loading matches...
+            </div>
+        </div>
+
+        <!-- League Position -->
+        <div class="section">
+            <div class="section-title">La Liga Table</div>
+            <div id="league-table" class="loading">
+                <div class="spinner"></div>
+                Loading standings...
+            </div>
+            <div class="last-updated" id="last-updated"></div>
+        </div>
+
+        <!-- La Liga Position Over Time -->
+        <div class="section">
+            <div class="section-title">La Liga Position</div>
+            <div id="position-chart" class="loading position-chart-wrap">
+                <div class="spinner"></div>
+                Loading position history...
+            </div>
+        </div>
+
+        <!-- La Liga Form Squares -->
+        <div class="section">
+            <div class="section-title">Form — La Liga</div>
+            <div class="legend">
+                <span class="legend-item"><span class="legend-swatch win"></span>Win</span>
+                <span class="legend-item"><span class="legend-swatch draw"></span>Draw</span>
+                <span class="legend-item"><span class="legend-swatch loss"></span>Loss</span>
+                <span class="legend-item"><span class="legend-swatch"></span>Upcoming</span>
+            </div>
+            <div id="pd-form" class="loading">
+                <div class="spinner"></div>
+                Loading form...
+            </div>
+        </div>
+
+        <!-- Champions League Form Squares (hidden if unavailable) -->
+        <div class="section" id="cl-section" style="display: none;">
+            <div class="section-title">Form — Champions League</div>
+            <div class="legend">
+                <span class="legend-item"><span class="legend-swatch win"></span>Win</span>
+                <span class="legend-item"><span class="legend-swatch draw"></span>Draw</span>
+                <span class="legend-item"><span class="legend-swatch loss"></span>Loss</span>
+                <span class="legend-item"><span class="legend-swatch"></span>Upcoming</span>
+                <span class="legend-item"><span class="legend-swatch eliminated"></span>Out</span>
+            </div>
+            <div id="cl-form"></div>
+        </div>
+    </div>
+
+    <script>
+        // Backend configuration
+        const ATLETICO_MADRID_ID = 78;
+
+        function shortenName(name) {
+            return name === 'Club Atlético de Madrid' ? 'Atleti' : name;
+        }
+
+        const COMPETITION_NAMES = {
+            'Primera Division': 'La Liga',
+            'UEFA Champions League': 'UCL',
+        };
+
+        function shortenCompetition(name) {
+            return COMPETITION_NAMES[name] || name;
+        }
+
+        async function fetchData() {
+            try {
+                // 🔧 CONFIGURE YOUR BACKEND URL HERE:
+                // Local testing: 'http://localhost:3000/api/atletico-data'
+                // Replit: 'https://your-replit-name.replit.dev/api/atletico-data'
+                // Vercel: 'https://your-vercel-app.vercel.app/api/atletico-data'
+                // Heroku: 'https://your-heroku-app.herokuapp.com/api/atletico-data'
+
+                const backendUrl = 'http://localhost:3000/api/atletico-data';
+
+                const response = await fetch(backendUrl);
+
+                if (!response.ok) {
+                    throw new Error(`Backend error: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.error) {
+                    showError('API Error: ' + data.error);
+                    return;
+                }
+
+                const allMatches = [
+                    ...(data.laLiga.matches || []),
+                    ...((data.championsLeague && data.championsLeague.matches) || [])
+                ];
+
+                renderMatchesList(allMatches);
+                displayStandings(data.laLiga.standings);
+                renderPositionChart(data.laLiga.positionHistory);
+                renderPdForm(data.laLiga.form);
+                renderClForm(data.championsLeague);
+
+                updateLastUpdated();
+            } catch (error) {
+                console.error('Fetch error:', error);
+                showError('❌ Error loading data. Make sure backend is running on http://localhost:3000');
+            }
+        }
+
+        function renderMatchesList(matches) {
+            const container = document.getElementById('matches-list');
+            container.classList.remove('loading');
+
+            const past = matches
+                .filter(m => m.status === 'FINISHED')
+                .sort((a, b) => new Date(b.utcDate) - new Date(a.utcDate))
+                .slice(0, 2)
+                .reverse();
+
+            const upcoming = matches
+                .filter(m => m.status === 'SCHEDULED' || m.status === 'TIMED')
+                .sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate))
+                .slice(0, 2);
+
+            const combined = [...past, ...upcoming];
+
+            container.innerHTML = combined.length > 0
+                ? combined.map(m => createMatchHTML(m, m.status === 'FINISHED')).join('')
+                : '<div class="empty-state">No matches to show</div>';
+        }
+
+        function createMatchHTML(match, isFinished) {
+            const isAtleticoHome = match.homeTeam.id === ATLETICO_MADRID_ID;
+            const opponent = shortenName(isAtleticoHome ? match.awayTeam.name : match.homeTeam.name);
+            const date = new Date(match.utcDate);
+            const dateStr = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+            const timeStr = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+
+            let scoreHTML;
+            if (isFinished) {
+                const atleticoGoals = isAtleticoHome ? match.score.fullTime.home : match.score.fullTime.away;
+                const opponentGoals = isAtleticoHome ? match.score.fullTime.away : match.score.fullTime.home;
+                let result = 'draw';
+                if (atleticoGoals > opponentGoals) result = 'win';
+                else if (atleticoGoals < opponentGoals) result = 'loss';
+                scoreHTML = `<div class="score ${result}">${match.score.fullTime.home} - ${match.score.fullTime.away}</div>`;
+            } else {
+                scoreHTML = `<div class="score upcoming">${timeStr}</div>`;
+            }
+
+            return `
+                <div class="match">
+                    <div class="match-date">
+                        <div>${dateStr}</div>
+                        <div class="match-date-competition">${shortenCompetition(match.competition.name)}</div>
+                    </div>
+                    <div class="match-body">
+                        <div class="match-opponent">
+                            <span class="sq upcoming">${isAtleticoHome ? 'H' : 'A'}</span>
+                            <span class="name">${opponent}</span>
+                        </div>
+                    </div>
+                    ${scoreHTML}
+                </div>
+            `;
+        }
+
+        function displayStandings(table) {
+            const container = document.getElementById('league-table');
+            const atleticoIndex = table.findIndex(t => t.team.id === ATLETICO_MADRID_ID);
+
+            // Show top 5 and Atlético if not in top 5
+            let displayTable = table.slice(0, 5);
+            if (atleticoIndex > 4) {
+                displayTable = [...table.slice(0, 4), table[atleticoIndex]];
+            }
+
+            const tableHTML = `
+                <table class="league-table">
+                    <thead class="table-header">
+                        <tr>
+                            <th>#</th>
+                            <th>Team</th>
+                            <th>P</th>
+                            <th>GD</th>
+                            <th>Pts</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${displayTable.map(team => {
+                            const isAtletico = team.team.id === ATLETICO_MADRID_ID;
+                            return `
+                                <tr class="table-row ${isAtletico ? 'our-team' : ''}">
+                                    <td class="position">${team.position}</td>
+                                    <td class="team-name">${shortenName(team.team.name)}</td>
+                                    <td class="points">${team.playedGames}</td>
+                                    <td class="points">${team.goalDifference > 0 ? '+' : ''}${team.goalDifference}</td>
+                                    <td class="points"><strong>${team.points}</strong></td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            container.innerHTML = tableHTML;
+        }
+
+        function positionColorClass(pos) {
+            if (pos === 1) return 'pos-1';
+            if (pos === 2) return 'pos-2';
+            if (pos <= 4) return 'pos-3-4';
+            return 'pos-5plus';
+        }
+
+        function renderPositionChart(history) {
+            const container = document.getElementById('position-chart');
+            container.classList.remove('loading');
+
+            if (!history || history.length === 0) {
+                container.innerHTML = '<div class="empty-state">No matches played yet</div>';
+                return;
+            }
+
+            const width = 560, height = 172, padding = 30;
+            const minPos = 1, maxPos = 20;
+            const n = history.length;
+            const xStep = n > 1 ? (width - padding * 2) / (n - 1) : 0;
+            const xFor = (i) => padding + i * xStep;
+            const yFor = (pos) => padding + ((pos - minPos) / (maxPos - minPos)) * (height - padding * 2);
+
+            const points = history.map((h, i) => `${xFor(i)},${yFor(h.position)}`).join(' ');
+            const dots = history.map((h, i) => {
+                const cls = positionColorClass(h.position);
+                return `<circle class="chart-dot ${cls}" cx="${xFor(i)}" cy="${yFor(h.position)}" r="3.5"><title>Matchday ${h.matchday}: #${h.position}</title></circle>` +
+                    `<text class="chart-label" x="${xFor(i)}" y="${yFor(h.position) - 10}">${h.position}</text>`;
+            }).join('');
+            const last = history[history.length - 1];
+
+            container.innerHTML = `
+                <svg viewBox="0 0 ${width} ${height}" width="100%" height="${height}">
+                    <line class="chart-grid" x1="${padding}" y1="${yFor(1)}" x2="${width - padding}" y2="${yFor(1)}" stroke-width="1" />
+                    <line class="chart-grid" x1="${padding}" y1="${yFor(20)}" x2="${width - padding}" y2="${yFor(20)}" stroke-width="1" />
+                    <polyline class="chart-line" points="${points}" fill="none" stroke-width="2" />
+                    ${dots}
+                </svg>
+                <div style="text-align: center;">
+                    <span class="position-pill">Currently #${last.position} · matchday ${last.matchday}</span>
+                </div>
+            `;
+        }
+
+        function squareClass(state) {
+            return 'sq ' + (['win', 'loss', 'draw', 'eliminated'].includes(state) ? state : 'upcoming');
+        }
+
+        function squareTitle(sq) {
+            if (sq.opponent) {
+                const date = new Date(sq.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                const score = sq.score ? ` (${sq.score.home}-${sq.score.away})` : '';
+                return `${date} vs ${shortenName(sq.opponent)}${score}`;
+            }
+            return sq.state === 'eliminated' ? 'Not reached' : 'Not yet scheduled';
+        }
+
+        function renderSquares(container, squares) {
+            container.innerHTML = squares.map(sq => {
+                const letter = sq.home === true ? 'H' : sq.home === false ? 'A' : '';
+                return `<div class="${squareClass(sq.state)}" title="${squareTitle(sq)}">${letter}</div>`;
+            }).join('');
+        }
+
+        function renderPdForm(form) {
+            const container = document.getElementById('pd-form');
+            container.classList.remove('loading');
+            if (!form || form.length === 0) {
+                container.innerHTML = '<div class="empty-state">No matches yet</div>';
+                return;
+            }
+            container.className = 'squares-rows';
+
+            const mid = Math.ceil(form.length / 2);
+            const rows = [form.slice(0, mid), form.slice(mid)];
+            container.innerHTML = rows.map((_, i) => `<div class="squares" id="pd-form-row-${i}"></div>`).join('');
+            rows.forEach((row, i) => renderSquares(document.getElementById(`pd-form-row-${i}`), row));
+        }
+
+        function renderClForm(championsLeague) {
+            const section = document.getElementById('cl-section');
+            const container = document.getElementById('cl-form');
+
+            if (!championsLeague || !championsLeague.phases || championsLeague.phases.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+
+            section.style.display = '';
+            container.innerHTML = championsLeague.phases.map(phase => `
+                <div class="phase-row">
+                    <div class="phase-label">${phase.label}</div>
+                    <div class="squares" id="phase-${phase.stage}"></div>
+                </div>
+            `).join('');
+
+            championsLeague.phases.forEach(phase => {
+                renderSquares(document.getElementById(`phase-${phase.stage}`), phase.squares);
+            });
+        }
+
+        function updateLastUpdated() {
+            const now = new Date();
+            document.getElementById('last-updated').textContent = `Updated: ${now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
+        }
+
+        function showError(message) {
+            const errorContainer = document.getElementById('error-container');
+            errorContainer.innerHTML = `<div class="error">${message}</div>`;
+        }
+
+        // Fetch data on page load
+        fetchData();
+
+        // Refresh data every 5 minutes
+        setInterval(fetchData, 5 * 60 * 1000);
+    </script>
+</body>
+</html>
