@@ -113,124 +113,110 @@ O elenco exato depende dos dados da temporada atual da football-data.org (acesso
 <details>
 <summary><strong>Premier League</strong> (Inglaterra) — 20 clubes</summary>
 
-|  |  |  |
-|---|---|---|
-| AFC Bournemouth | Arsenal FC | Aston Villa FC |
-| Brentford FC | Brighton & Hove Albion FC | Chelsea FC |
-| Coventry City FC | Crystal Palace FC | Everton FC |
-| Fulham FC | Hull City AFC | Ipswich Town FC |
-| Leeds United FC | Liverpool FC | Manchester City FC |
-| Manchester United FC | Newcastle United FC | Nottingham Forest FC |
-| Sunderland AFC | Tottenham Hotspur FC | |
+<table>
+<tr><td>AFC Bournemouth</td><td>Arsenal FC</td><td>Aston Villa FC</td><td>Brentford FC</td></tr>
+<tr><td>Brighton &amp; Hove Albion FC</td><td>Chelsea FC</td><td>Coventry City FC</td><td>Crystal Palace FC</td></tr>
+<tr><td>Everton FC</td><td>Fulham FC</td><td>Hull City AFC</td><td>Ipswich Town FC</td></tr>
+<tr><td>Leeds United FC</td><td>Liverpool FC</td><td>Manchester City FC</td><td>Manchester United FC</td></tr>
+<tr><td>Newcastle United FC</td><td>Nottingham Forest FC</td><td>Sunderland AFC</td><td>Tottenham Hotspur FC</td></tr>
+</table>
 </details>
 
 <details>
 <summary><strong>Championship</strong> (Inglaterra) — 24 clubes</summary>
 
-|  |  |  |
-|---|---|---|
-| Birmingham City FC | Blackburn Rovers FC | Bolton Wanderers FC |
-| Bristol City FC | Burnley FC | Cardiff City FC |
-| Charlton Athletic FC | Derby County FC | Lincoln City FC |
-| Middlesbrough FC | Millwall FC | Norwich City FC |
-| Portsmouth FC | Preston North End FC | Queens Park Rangers FC |
-| Sheffield United FC | Southampton FC | Stoke City FC |
-| Swansea City AFC | Watford FC | West Bromwich Albion FC |
-| West Ham United FC | Wolverhampton Wanderers FC | Wrexham AFC |
+<table>
+<tr><td>Birmingham City FC</td><td>Blackburn Rovers FC</td><td>Bolton Wanderers FC</td><td>Bristol City FC</td></tr>
+<tr><td>Burnley FC</td><td>Cardiff City FC</td><td>Charlton Athletic FC</td><td>Derby County FC</td></tr>
+<tr><td>Lincoln City FC</td><td>Middlesbrough FC</td><td>Millwall FC</td><td>Norwich City FC</td></tr>
+<tr><td>Portsmouth FC</td><td>Preston North End FC</td><td>Queens Park Rangers FC</td><td>Sheffield United FC</td></tr>
+<tr><td>Southampton FC</td><td>Stoke City FC</td><td>Swansea City AFC</td><td>Watford FC</td></tr>
+<tr><td>West Bromwich Albion FC</td><td>West Ham United FC</td><td>Wolverhampton Wanderers FC</td><td>Wrexham AFC</td></tr>
+</table>
 </details>
 
 <details>
 <summary><strong>La Liga</strong> (Espanha) — 20 clubes</summary>
 
-|  |  |  |
-|---|---|---|
-| Athletic Club | CA Osasuna | Club Atlético de Madrid |
-| Deportivo Alavés | Elche CF | FC Barcelona |
-| Getafe CF | Levante UD | Málaga CF |
-| Rayo Vallecano de Madrid | RC Celta de Vigo | RC Deportivo La Coruña |
-| RCD Espanyol de Barcelona | Real Betis Balompié | Real Madrid CF |
-| Real Racing Club de Santander | Real Sociedad de Fútbol | Sevilla FC |
-| Valencia CF | Villarreal CF | |
+<table>
+<tr><td>Athletic Club</td><td>CA Osasuna</td><td>Club Atlético de Madrid</td><td>Deportivo Alavés</td></tr>
+<tr><td>Elche CF</td><td>FC Barcelona</td><td>Getafe CF</td><td>Levante UD</td></tr>
+<tr><td>Málaga CF</td><td>Rayo Vallecano de Madrid</td><td>RC Celta de Vigo</td><td>RC Deportivo La Coruña</td></tr>
+<tr><td>RCD Espanyol de Barcelona</td><td>Real Betis Balompié</td><td>Real Madrid CF</td><td>Real Racing Club de Santander</td></tr>
+<tr><td>Real Sociedad de Fútbol</td><td>Sevilla FC</td><td>Valencia CF</td><td>Villarreal CF</td></tr>
+</table>
 </details>
 
 <details>
 <summary><strong>Serie A</strong> (Itália) — 20 clubes</summary>
 
-|  |  |  |
-|---|---|---|
-| AC Milan | AC Monza | ACF Fiorentina |
-| AS Roma | Atalanta BC | Bologna FC 1909 |
-| Cagliari Calcio | Como 1907 | FC Internazionale Milano |
-| Frosinone Calcio | Genoa CFC | Juventus FC |
-| Parma Calcio 1913 | SS Lazio | SSC Napoli |
-| Torino FC | Udinese Calcio | US Lecce |
-| US Sassuolo Calcio | Venezia FC | |
+<table>
+<tr><td>AC Milan</td><td>AC Monza</td><td>ACF Fiorentina</td><td>AS Roma</td></tr>
+<tr><td>Atalanta BC</td><td>Bologna FC 1909</td><td>Cagliari Calcio</td><td>Como 1907</td></tr>
+<tr><td>FC Internazionale Milano</td><td>Frosinone Calcio</td><td>Genoa CFC</td><td>Juventus FC</td></tr>
+<tr><td>Parma Calcio 1913</td><td>SS Lazio</td><td>SSC Napoli</td><td>Torino FC</td></tr>
+<tr><td>Udinese Calcio</td><td>US Lecce</td><td>US Sassuolo Calcio</td><td>Venezia FC</td></tr>
+</table>
 </details>
 
 <details>
 <summary><strong>Bundesliga</strong> (Alemanha) — 18 clubes</summary>
 
-|  |  |  |
-|---|---|---|
-| 1. FC Köln | 1. FC Union Berlin | 1. FSV Mainz 05 |
-| Bayer 04 Leverkusen | Borussia Dortmund | Borussia Mönchengladbach |
-| Eintracht Frankfurt | FC Augsburg | FC Bayern München |
-| FC Schalke 04 | Hamburger SV | RB Leipzig |
-| SC Freiburg | SC Paderborn 07 | SV 07 Elversberg |
-| SV Werder Bremen | TSG 1899 Hoffenheim | VfB Stuttgart |
+<table>
+<tr><td>1. FC Köln</td><td>1. FC Union Berlin</td><td>1. FSV Mainz 05</td><td>Bayer 04 Leverkusen</td></tr>
+<tr><td>Borussia Dortmund</td><td>Borussia Mönchengladbach</td><td>Eintracht Frankfurt</td><td>FC Augsburg</td></tr>
+<tr><td>FC Bayern München</td><td>FC Schalke 04</td><td>Hamburger SV</td><td>RB Leipzig</td></tr>
+<tr><td>SC Freiburg</td><td>SC Paderborn 07</td><td>SV 07 Elversberg</td><td>SV Werder Bremen</td></tr>
+<tr><td>TSG 1899 Hoffenheim</td><td>VfB Stuttgart</td><td></td><td></td></tr>
+</table>
 </details>
 
 <details>
 <summary><strong>Ligue 1</strong> (França) — 18 clubes</summary>
 
-|  |  |  |
-|---|---|---|
-| AJ Auxerre | Angers SCO | AS Monaco FC |
-| ES Troyes AC | FC Lorient | Le Havre AC |
-| Le Mans FC | Lille OSC | OGC Nice |
-| Olympique de Marseille | Olympique Lyonnais | Paris FC |
-| Paris Saint-Germain FC | Racing Club de Lens | RC Strasbourg Alsace |
-| Stade Brestois 29 | Stade Rennais FC 1901 | Toulouse FC |
+<table>
+<tr><td>AJ Auxerre</td><td>Angers SCO</td><td>AS Monaco FC</td><td>ES Troyes AC</td></tr>
+<tr><td>FC Lorient</td><td>Le Havre AC</td><td>Le Mans FC</td><td>Lille OSC</td></tr>
+<tr><td>OGC Nice</td><td>Olympique de Marseille</td><td>Olympique Lyonnais</td><td>Paris FC</td></tr>
+<tr><td>Paris Saint-Germain FC</td><td>Racing Club de Lens</td><td>RC Strasbourg Alsace</td><td>Stade Brestois 29</td></tr>
+<tr><td>Stade Rennais FC 1901</td><td>Toulouse FC</td><td></td><td></td></tr>
+</table>
 </details>
 
 <details>
 <summary><strong>Eredivisie</strong> (Holanda) — 18 clubes</summary>
 
-|  |  |  |
-|---|---|---|
-| ADO Den Haag | AFC Ajax | AZ |
-| FC Groningen | FC Twente '65 | FC Utrecht |
-| Feyenoord Rotterdam | Fortuna Sittard | Go Ahead Eagles |
-| NEC | PEC Zwolle | PSV |
-| SBV Excelsior | SC Cambuur-Leeuwarden | SC Heerenveen |
-| Sparta Rotterdam | Telstar 1963 | Willem II Tilburg |
+<table>
+<tr><td>ADO Den Haag</td><td>AFC Ajax</td><td>AZ</td><td>FC Groningen</td></tr>
+<tr><td>FC Twente '65</td><td>FC Utrecht</td><td>Feyenoord Rotterdam</td><td>Fortuna Sittard</td></tr>
+<tr><td>Go Ahead Eagles</td><td>NEC</td><td>PEC Zwolle</td><td>PSV</td></tr>
+<tr><td>SBV Excelsior</td><td>SC Cambuur-Leeuwarden</td><td>SC Heerenveen</td><td>Sparta Rotterdam</td></tr>
+<tr><td>Telstar 1963</td><td>Willem II Tilburg</td><td></td><td></td></tr>
+</table>
 </details>
 
 <details>
 <summary><strong>Primeira Liga</strong> (Portugal) — 18 clubes</summary>
 
-|  |  |  |
-|---|---|---|
-| Académico de Viseu FC | Casa Pia AC | CD Nacional |
-| CD Santa Clara | CF Estrela da Amadora | CS Marítimo |
-| FC Alverca | FC Arouca | FC Famalicão |
-| FC Porto | GD Estoril Praia | Gil Vicente FC |
-| Moreirense FC | Rio Ave FC | Sport Lisboa e Benfica |
-| Sporting Clube de Braga | Sporting Clube de Portugal | Vitória SC |
+<table>
+<tr><td>Académico de Viseu FC</td><td>Casa Pia AC</td><td>CD Nacional</td><td>CD Santa Clara</td></tr>
+<tr><td>CF Estrela da Amadora</td><td>CS Marítimo</td><td>FC Alverca</td><td>FC Arouca</td></tr>
+<tr><td>FC Famalicão</td><td>FC Porto</td><td>GD Estoril Praia</td><td>Gil Vicente FC</td></tr>
+<tr><td>Moreirense FC</td><td>Rio Ave FC</td><td>Sport Lisboa e Benfica</td><td>Sporting Clube de Braga</td></tr>
+<tr><td>Sporting Clube de Portugal</td><td>Vitória SC</td><td></td><td></td></tr>
+</table>
 </details>
 
 <details>
 <summary><strong>Brasileirão</strong> (Brasil) — 20 clubes</summary>
 
-|  |  |  |
-|---|---|---|
-| Botafogo FR | CA Mineiro | CA Paranaense |
-| Chapecoense AF | Clube do Remo | Coritiba FBC |
-| CR Flamengo | CR Vasco da Gama | Cruzeiro EC |
-| EC Bahia | EC Vitória | Fluminense FC |
-| Grêmio FBPA | Mirassol FC | RB Bragantino |
-| Santos FC | São Paulo FC | SC Corinthians Paulista |
-| SC Internacional | SE Palmeiras | |
+<table>
+<tr><td>Botafogo FR</td><td>CA Mineiro</td><td>CA Paranaense</td><td>Chapecoense AF</td></tr>
+<tr><td>Clube do Remo</td><td>Coritiba FBC</td><td>CR Flamengo</td><td>CR Vasco da Gama</td></tr>
+<tr><td>Cruzeiro EC</td><td>EC Bahia</td><td>EC Vitória</td><td>Fluminense FC</td></tr>
+<tr><td>Grêmio FBPA</td><td>Mirassol FC</td><td>RB Bragantino</td><td>Santos FC</td></tr>
+<tr><td>São Paulo FC</td><td>SC Corinthians Paulista</td><td>SC Internacional</td><td>SE Palmeiras</td></tr>
+</table>
 </details>
 
 ## 🛠️ Solução de Problemas
