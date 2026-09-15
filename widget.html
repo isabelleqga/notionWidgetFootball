@@ -457,6 +457,7 @@
         .sq.draw, .legend-swatch.draw { background: var(--draw); border-color: var(--draw); }
         .sq.loss, .legend-swatch.loss { background: var(--loss); border-color: var(--loss); }
         .sq.eliminated, .legend-swatch.eliminated { background: var(--eliminated); }
+        .sq.filler { background: #000; border-color: #000; }
 
         .sq.win, .sq.draw, .sq.loss, .sq.eliminated {
             color: #fff;
@@ -932,7 +933,7 @@
         }
 
         function squareClass(state) {
-            return 'sq ' + (['win', 'loss', 'draw', 'eliminated'].includes(state) ? state : 'upcoming');
+            return 'sq ' + (['win', 'loss', 'draw', 'eliminated', 'filler'].includes(state) ? state : 'upcoming');
         }
 
         function squareTitle(sq) {
@@ -941,6 +942,7 @@
                 const score = sq.score ? ` (${sq.score.home}-${sq.score.away})` : '';
                 return `${date} vs ${sq.opponent}${score}`;
             }
+            if (sq.state === 'filler') return '';
             return sq.state === 'eliminated' ? 'Not reached' : 'Not yet scheduled';
         }
 
@@ -960,11 +962,12 @@
             }
             container.className = 'squares-rows';
 
-            // Always split into two equal-length rows; if there's an odd match
-            // out, drop the oldest one rather than showing uneven rows.
-            const trimmed = form.length % 2 === 0 ? form : form.slice(1);
-            const half = trimmed.length / 2;
-            const rows = [trimmed.slice(0, half), trimmed.slice(half)];
+            // Always split into two equal-length rows; pad with a filler
+            // square (never drop a real match) when the total is odd.
+            const filler = { state: 'filler', opponent: null, home: null, date: null, score: null };
+            const padded = form.length % 2 === 0 ? form : [filler, ...form];
+            const half = padded.length / 2;
+            const rows = [padded.slice(0, half), padded.slice(half)];
             container.innerHTML = rows.map((_, i) => `<div class="squares" id="league-form-row-${i}"></div>`).join('');
             rows.forEach((row, i) => renderSquares(document.getElementById(`league-form-row-${i}`), row));
         }
