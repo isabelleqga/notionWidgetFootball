@@ -113,7 +113,7 @@ O elenco exato depende dos dados da temporada atual da football-data.org (acesso
 <details>
 <summary><strong>Premier League</strong> (Inglaterra) — 20 clubes</summary>
 
-<table style="width: 100%;">
+<table width="100%">
 <tr><td>AFC Bournemouth</td><td>Arsenal FC</td><td>Aston Villa FC</td><td>Brentford FC</td></tr>
 <tr><td>Brighton &amp; Hove Albion FC</td><td>Chelsea FC</td><td>Coventry City FC</td><td>Crystal Palace FC</td></tr>
 <tr><td>Everton FC</td><td>Fulham FC</td><td>Hull City AFC</td><td>Ipswich Town FC</td></tr>
@@ -125,7 +125,7 @@ O elenco exato depende dos dados da temporada atual da football-data.org (acesso
 <details>
 <summary><strong>Championship</strong> (Inglaterra) — 24 clubes</summary>
 
-<table style="width: 100%;">
+<table width="100%">
 <tr><td>Birmingham City FC</td><td>Blackburn Rovers FC</td><td>Bolton Wanderers FC</td><td>Bristol City FC</td></tr>
 <tr><td>Burnley FC</td><td>Cardiff City FC</td><td>Charlton Athletic FC</td><td>Derby County FC</td></tr>
 <tr><td>Lincoln City FC</td><td>Middlesbrough FC</td><td>Millwall FC</td><td>Norwich City FC</td></tr>
@@ -138,7 +138,7 @@ O elenco exato depende dos dados da temporada atual da football-data.org (acesso
 <details>
 <summary><strong>La Liga</strong> (Espanha) — 20 clubes</summary>
 
-<table style="width: 100%;">
+<table width="100%">
 <tr><td>Athletic Club</td><td>CA Osasuna</td><td>Club Atlético de Madrid</td><td>Deportivo Alavés</td></tr>
 <tr><td>Elche CF</td><td>FC Barcelona</td><td>Getafe CF</td><td>Levante UD</td></tr>
 <tr><td>Málaga CF</td><td>Rayo Vallecano de Madrid</td><td>RC Celta de Vigo</td><td>RC Deportivo La Coruña</td></tr>
@@ -150,7 +150,7 @@ O elenco exato depende dos dados da temporada atual da football-data.org (acesso
 <details>
 <summary><strong>Serie A</strong> (Itália) — 20 clubes</summary>
 
-<table style="width: 100%;">
+<table width="100%">
 <tr><td>AC Milan</td><td>AC Monza</td><td>ACF Fiorentina</td><td>AS Roma</td></tr>
 <tr><td>Atalanta BC</td><td>Bologna FC 1909</td><td>Cagliari Calcio</td><td>Como 1907</td></tr>
 <tr><td>FC Internazionale Milano</td><td>Frosinone Calcio</td><td>Genoa CFC</td><td>Juventus FC</td></tr>
@@ -162,7 +162,7 @@ O elenco exato depende dos dados da temporada atual da football-data.org (acesso
 <details>
 <summary><strong>Bundesliga</strong> (Alemanha) — 18 clubes</summary>
 
-<table style="width: 100%;">
+<table width="100%">
 <tr><td>1. FC Köln</td><td>1. FC Union Berlin</td><td>1. FSV Mainz 05</td><td>Bayer 04 Leverkusen</td></tr>
 <tr><td>Borussia Dortmund</td><td>Borussia Mönchengladbach</td><td>Eintracht Frankfurt</td><td>FC Augsburg</td></tr>
 <tr><td>FC Bayern München</td><td>FC Schalke 04</td><td>Hamburger SV</td><td>RB Leipzig</td></tr>
@@ -174,7 +174,7 @@ O elenco exato depende dos dados da temporada atual da football-data.org (acesso
 <details>
 <summary><strong>Ligue 1</strong> (França) — 18 clubes</summary>
 
-<table style="width: 100%;">
+<table width="100%">
 <tr><td>AJ Auxerre</td><td>Angers SCO</td><td>AS Monaco FC</td><td>ES Troyes AC</td></tr>
 <tr><td>FC Lorient</td><td>Le Havre AC</td><td>Le Mans FC</td><td>Lille OSC</td></tr>
 <tr><td>OGC Nice</td><td>Olympique de Marseille</td><td>Olympique Lyonnais</td><td>Paris FC</td></tr>
@@ -186,7 +186,7 @@ O elenco exato depende dos dados da temporada atual da football-data.org (acesso
 <details>
 <summary><strong>Eredivisie</strong> (Holanda) — 18 clubes</summary>
 
-<table style="width: 100%;">
+<table width="100%">
 <tr><td>ADO Den Haag</td><td>AFC Ajax</td><td>AZ</td><td>FC Groningen</td></tr>
 <tr><td>FC Twente '65</td><td>FC Utrecht</td><td>Feyenoord Rotterdam</td><td>Fortuna Sittard</td></tr>
 <tr><td>Go Ahead Eagles</td><td>NEC</td><td>PEC Zwolle</td><td>PSV</td></tr>
@@ -198,7 +198,7 @@ O elenco exato depende dos dados da temporada atual da football-data.org (acesso
 <details>
 <summary><strong>Primeira Liga</strong> (Portugal) — 18 clubes</summary>
 
-<table style="width: 100%;">
+<table width="100%">
 <tr><td>Académico de Viseu FC</td><td>Casa Pia AC</td><td>CD Nacional</td><td>CD Santa Clara</td></tr>
 <tr><td>CF Estrela da Amadora</td><td>CS Marítimo</td><td>FC Alverca</td><td>FC Arouca</td></tr>
 <tr><td>FC Famalicão</td><td>FC Porto</td><td>GD Estoril Praia</td><td>Gil Vicente FC</td></tr>
@@ -210,7 +210,7 @@ O elenco exato depende dos dados da temporada atual da football-data.org (acesso
 <details>
 <summary><strong>Brasileirão</strong> (Brasil) — 20 clubes</summary>
 
-<table style="width: 100%;">
+<table width="100%">
 <tr><td>Botafogo FR</td><td>CA Mineiro</td><td>CA Paranaense</td><td>Chapecoense AF</td></tr>
 <tr><td>Clube do Remo</td><td>Coritiba FBC</td><td>CR Flamengo</td><td>CR Vasco da Gama</td></tr>
 <tr><td>Cruzeiro EC</td><td>EC Bahia</td><td>EC Vitória</td><td>Fluminense FC</td></tr>
