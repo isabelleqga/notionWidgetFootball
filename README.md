@@ -1,5 +1,3 @@
-<img width="1170" height="152" alt="image" src="https://github.com/user-attachments/assets/1b009fb6-c882-4f5a-a67b-9ecbc819ad7a" />
-
 # Football Club Widget
 
 <p align="center"><strong>Languages:</strong> <a href="README.md">English</a> | <a href="README.pt-BR.md">Português (Brasil)</a></p>
