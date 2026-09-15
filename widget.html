@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atlético Madrid Live Widget</title>
+    <title>Football Club Widget</title>
     <style>
         :root {
             --bg: #f5f6f8;
@@ -19,10 +19,10 @@
             --upcoming: #d5d8dc;
             --eliminated: #24262b;
 
-            --pos-1: #1c7ed6;
-            --pos-2: #2f9e44;
-            --pos-3-4: #f2b705;
-            --pos-5plus: #e03131;
+            --zone-first: #1c7ed6;
+            --zone-top: #2f9e44;
+            --zone-mid: #f2b705;
+            --zone-relegation: #e03131;
 
             --warning-bg: #fff8e6;
             --warning-text: #8a6300;
@@ -48,10 +48,10 @@
                 --upcoming: #34373c;
                 --eliminated: #0b0c0d;
 
-                --pos-1: #4dabf7;
-                --pos-2: #4caf50;
-                --pos-3-4: #ffd43b;
-                --pos-5plus: #ef5350;
+                --zone-first: #4dabf7;
+                --zone-top: #4caf50;
+                --zone-mid: #ffd43b;
+                --zone-relegation: #ef5350;
 
                 --warning-bg: #2b2410;
                 --warning-text: #e0c473;
@@ -84,7 +84,7 @@
 
         .header {
             text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 20px;
         }
 
         .club-name {
@@ -97,6 +97,27 @@
             font-size: 13px;
             color: var(--text-muted);
             margin-top: 4px;
+        }
+
+        .selector-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .selector-row select {
+            flex: 1;
+            min-width: 0;
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .selector-row select:disabled {
+            color: var(--text-muted);
         }
 
         .section {
@@ -285,21 +306,6 @@
             margin-top: 10px;
         }
 
-        .api-config-needed {
-            background: var(--warning-bg);
-            color: var(--warning-text);
-            padding: 15px;
-            border-radius: 6px;
-            border: 1px solid var(--warning-border);
-            margin-bottom: 20px;
-        }
-
-        .api-config-needed a {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
         .position-chart-wrap svg {
             display: block;
         }
@@ -323,10 +329,10 @@
             text-anchor: middle;
         }
 
-        .chart-dot.pos-1 { fill: var(--pos-1); }
-        .chart-dot.pos-2 { fill: var(--pos-2); }
-        .chart-dot.pos-3-4 { fill: var(--pos-3-4); }
-        .chart-dot.pos-5plus { fill: var(--pos-5plus); }
+        .chart-dot.zone-first { fill: var(--zone-first); }
+        .chart-dot.zone-top { fill: var(--zone-top); }
+        .chart-dot.zone-mid { fill: var(--zone-mid); }
+        .chart-dot.zone-relegation { fill: var(--zone-relegation); }
 
         .position-pill {
             display: inline-block;
@@ -433,13 +439,20 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="club-name">Atlético de Madrid</div>
-            <div class="club-subtitle">La Liga 2025/26</div>
+            <div class="club-name" id="club-name">Football Club Widget</div>
+            <div class="club-subtitle" id="club-subtitle">Pick a country and club below</div>
         </div>
 
-        <!-- Backend Configuration Info -->
-        <div id="api-warning" class="api-config-needed" style="display: none;">
-            <strong>Backend Not Configured:</strong> Please deploy the backend server and update the backend URL in the HTML.
+        <!-- Club selector -->
+        <div class="section">
+            <div class="selector-row">
+                <select id="country-select">
+                    <option value="">Country…</option>
+                </select>
+                <select id="club-select" disabled>
+                    <option value="">Club…</option>
+                </select>
+            </div>
         </div>
 
         <!-- Error Messages -->
@@ -448,47 +461,35 @@
         <!-- Matches -->
         <div class="section">
             <div class="section-title">Matches</div>
-            <div id="matches-list" class="loading">
-                <div class="spinner"></div>
-                Loading matches...
-            </div>
+            <div id="matches-list" class="empty-state">Pick a club above to see matches</div>
         </div>
 
-        <!-- League Position -->
+        <!-- League Table -->
         <div class="section">
-            <div class="section-title">La Liga Table</div>
-            <div id="league-table" class="loading">
-                <div class="spinner"></div>
-                Loading standings...
-            </div>
+            <div class="section-title" id="league-table-title">League Table</div>
+            <div id="league-table" class="empty-state">Pick a club above to see standings</div>
             <div class="last-updated" id="last-updated"></div>
         </div>
 
-        <!-- La Liga Position Over Time -->
+        <!-- League Position Over Time -->
         <div class="section">
-            <div class="section-title">La Liga Position</div>
-            <div id="position-chart" class="loading position-chart-wrap">
-                <div class="spinner"></div>
-                Loading position history...
-            </div>
+            <div class="section-title" id="position-chart-title">League Position</div>
+            <div id="position-chart" class="empty-state position-chart-wrap">Pick a club above to see position history</div>
         </div>
 
-        <!-- La Liga Form Squares -->
+        <!-- League Form Squares -->
         <div class="section">
-            <div class="section-title">Form — La Liga</div>
+            <div class="section-title" id="league-form-title">Form</div>
             <div class="legend">
                 <span class="legend-item"><span class="legend-swatch win"></span>Win</span>
                 <span class="legend-item"><span class="legend-swatch draw"></span>Draw</span>
                 <span class="legend-item"><span class="legend-swatch loss"></span>Loss</span>
                 <span class="legend-item"><span class="legend-swatch"></span>Upcoming</span>
             </div>
-            <div id="pd-form" class="loading">
-                <div class="spinner"></div>
-                Loading form...
-            </div>
+            <div id="league-form" class="empty-state">Pick a club above to see recent form</div>
         </div>
 
-        <!-- Champions League Form Squares (hidden if unavailable) -->
+        <!-- Champions League Form Squares (hidden if not applicable) -->
         <div class="section" id="cl-section" style="display: none;">
             <div class="section-title">Form — Champions League</div>
             <div class="legend">
@@ -503,66 +504,179 @@
     </div>
 
     <script>
-        // Backend configuration
-        const ATLETICO_MADRID_ID = 78;
+        // 🔧 CONFIGURE YOUR BACKEND URL HERE:
+        // Local testing: 'http://localhost:3000'
+        // Replit: 'https://your-replit-name.replit.dev'
+        // Vercel: 'https://your-vercel-app.vercel.app'
+        // Heroku: 'https://your-heroku-app.herokuapp.com'
+        const backendUrl = 'http://localhost:3000';
 
-        function shortenName(name) {
-            return name === 'Club Atlético de Madrid' ? 'Atleti' : name;
-        }
+        const STORAGE_KEY = 'football-widget-selection';
 
-        const COMPETITION_NAMES = {
-            'Primera Division': 'La Liga',
-            'UEFA Champions League': 'UCL',
-        };
+        let currentTeamId = null;
+        let currentCompetition = null;
+        let currentTeamShortName = null;
+        let leaguesByCountry = {};
+        let competitionToCountry = {};
 
-        function shortenCompetition(name) {
-            return COMPETITION_NAMES[name] || name;
-        }
-
-        async function fetchData() {
+        function saveSelection(competition, teamId) {
             try {
-                // 🔧 CONFIGURE YOUR BACKEND URL HERE:
-                // Local testing: 'http://localhost:3000/api/atletico-data'
-                // Replit: 'https://your-replit-name.replit.dev/api/atletico-data'
-                // Vercel: 'https://your-vercel-app.vercel.app/api/atletico-data'
-                // Heroku: 'https://your-heroku-app.herokuapp.com/api/atletico-data'
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({ competition, teamId }));
+            } catch (e) {
+                // localStorage unavailable (private browsing, etc.) — selection just won't persist
+            }
+        }
 
-                const backendUrl = 'http://localhost:3000/api/atletico-data';
+        function loadSavedSelection() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                return raw ? JSON.parse(raw) : null;
+            } catch (e) {
+                return null;
+            }
+        }
 
-                const response = await fetch(backendUrl);
+        async function initSelectors() {
+            const countrySelect = document.getElementById('country-select');
+            const clubSelect = document.getElementById('club-select');
 
+            try {
+                const res = await fetch(`${backendUrl}/api/leagues`);
+                const data = await res.json();
+
+                leaguesByCountry = {};
+                competitionToCountry = {};
+                data.leagues.forEach(l => {
+                    (leaguesByCountry[l.country] = leaguesByCountry[l.country] || []).push(l);
+                    competitionToCountry[l.code] = l.country;
+                });
+
+                const countries = Object.keys(leaguesByCountry).sort();
+                countrySelect.innerHTML = '<option value="">Country…</option>' +
+                    countries.map(c => `<option value="${c}">${c}</option>`).join('');
+            } catch (e) {
+                console.error('Failed to load leagues:', e);
+                showError('❌ Could not reach the backend. Make sure it is running on ' + backendUrl);
+                return;
+            }
+
+            countrySelect.addEventListener('change', () => onCountryChange(countrySelect.value));
+            clubSelect.addEventListener('change', () => onClubChange(clubSelect.value));
+
+            const saved = loadSavedSelection();
+            if (saved && competitionToCountry[saved.competition]) {
+                countrySelect.value = competitionToCountry[saved.competition];
+                await onCountryChange(countrySelect.value, saved);
+            }
+        }
+
+        async function onCountryChange(country, preselect) {
+            const clubSelect = document.getElementById('club-select');
+            clubSelect.disabled = true;
+            clubSelect.innerHTML = '<option value="">Loading clubs…</option>';
+
+            if (!country) {
+                clubSelect.innerHTML = '<option value="">Club…</option>';
+                return;
+            }
+
+            const codes = leaguesByCountry[country].map(l => l.code);
+            try {
+                const results = await Promise.all(codes.map(code =>
+                    fetch(`${backendUrl}/api/clubs?competition=${code}`).then(r => r.json())
+                ));
+
+                const clubs = [];
+                results.forEach((r, i) => {
+                    (r.clubs || []).forEach(c => clubs.push({ ...c, competition: codes[i] }));
+                });
+                clubs.sort((a, b) => a.name.localeCompare(b.name));
+
+                clubSelect.innerHTML = '<option value="">Club…</option>' +
+                    clubs.map(c => `<option value="${c.competition}|${c.id}">${c.name}</option>`).join('');
+                clubSelect.disabled = false;
+
+                if (preselect) {
+                    const value = `${preselect.competition}|${preselect.teamId}`;
+                    if ([...clubSelect.options].some(o => o.value === value)) {
+                        clubSelect.value = value;
+                        await onClubChange(value);
+                    }
+                }
+            } catch (e) {
+                console.error('Failed to load clubs:', e);
+                showError('❌ Could not load clubs for ' + country);
+            }
+        }
+
+        async function onClubChange(value) {
+            if (!value) return;
+            const [competition, teamIdStr] = value.split('|');
+            const teamId = parseInt(teamIdStr, 10);
+            saveSelection(competition, teamId);
+            await loadClubData(competition, teamId);
+        }
+
+        async function loadClubData(competition, teamId) {
+            currentCompetition = competition;
+            currentTeamId = teamId;
+
+            setLoadingState();
+
+            try {
+                const response = await fetch(`${backendUrl}/api/club-data?teamId=${teamId}&competition=${competition}`);
                 if (!response.ok) {
                     throw new Error(`Backend error: ${response.status}`);
                 }
 
                 const data = await response.json();
-
                 if (data.error) {
                     showError('API Error: ' + data.error);
                     return;
                 }
 
+                currentTeamShortName = data.team.shortName || data.team.name;
+
+                document.getElementById('club-name').textContent = data.team.name;
+                document.getElementById('club-subtitle').textContent = data.league.name;
+                document.getElementById('league-table-title').textContent = `${data.league.name} Table`;
+                document.getElementById('position-chart-title').textContent = `${data.league.name} Position`;
+                document.getElementById('league-form-title').textContent = `Form — ${data.league.name}`;
+
                 const allMatches = [
-                    ...(data.laLiga.matches || []),
+                    ...(data.league.matches || []),
                     ...((data.championsLeague && data.championsLeague.matches) || [])
                 ];
 
                 renderMatchesList(allMatches);
-                displayStandings(data.laLiga.standings);
-                renderPositionChart(data.laLiga.positionHistory);
-                renderPdForm(data.laLiga.form);
+                displayStandings(data.league.standings);
+                renderPositionChart(data.league.positionHistory, data.league.teamCount, data.league.relegationZone);
+                renderLeagueForm(data.league.form);
                 renderClForm(data.championsLeague);
 
                 updateLastUpdated();
             } catch (error) {
                 console.error('Fetch error:', error);
-                showError('❌ Error loading data. Make sure backend is running on http://localhost:3000');
+                showError('❌ Error loading data. Make sure the backend is running on ' + backendUrl);
             }
+        }
+
+        function setLoadingState() {
+            document.getElementById('error-container').innerHTML = '';
+            [
+                ['matches-list', 'Loading matches...'],
+                ['league-table', 'Loading standings...'],
+                ['position-chart', 'Loading position history...'],
+                ['league-form', 'Loading form...'],
+            ].forEach(([id, label]) => {
+                const el = document.getElementById(id);
+                el.className = id === 'position-chart' ? 'loading position-chart-wrap' : 'loading';
+                el.innerHTML = `<div class="spinner"></div>${label}`;
+            });
         }
 
         function renderMatchesList(matches) {
             const container = document.getElementById('matches-list');
-            container.classList.remove('loading');
 
             const past = matches
                 .filter(m => m.status === 'FINISHED')
@@ -577,25 +691,26 @@
 
             const combined = [...past, ...upcoming];
 
+            container.className = combined.length > 0 ? '' : 'empty-state';
             container.innerHTML = combined.length > 0
                 ? combined.map(m => createMatchHTML(m, m.status === 'FINISHED')).join('')
                 : '<div class="empty-state">No matches to show</div>';
         }
 
         function createMatchHTML(match, isFinished) {
-            const isAtleticoHome = match.homeTeam.id === ATLETICO_MADRID_ID;
-            const opponent = shortenName(isAtleticoHome ? match.awayTeam.name : match.homeTeam.name);
+            const isHome = match.homeTeam.id === currentTeamId;
+            const opponent = isHome ? match.awayTeam.name : match.homeTeam.name;
             const date = new Date(match.utcDate);
             const dateStr = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
             const timeStr = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
 
             let scoreHTML;
             if (isFinished) {
-                const atleticoGoals = isAtleticoHome ? match.score.fullTime.home : match.score.fullTime.away;
-                const opponentGoals = isAtleticoHome ? match.score.fullTime.away : match.score.fullTime.home;
+                const ourGoals = isHome ? match.score.fullTime.home : match.score.fullTime.away;
+                const theirGoals = isHome ? match.score.fullTime.away : match.score.fullTime.home;
                 let result = 'draw';
-                if (atleticoGoals > opponentGoals) result = 'win';
-                else if (atleticoGoals < opponentGoals) result = 'loss';
+                if (ourGoals > theirGoals) result = 'win';
+                else if (ourGoals < theirGoals) result = 'loss';
                 scoreHTML = `<div class="score ${result}">${match.score.fullTime.home} - ${match.score.fullTime.away}</div>`;
             } else {
                 scoreHTML = `<div class="score upcoming">${timeStr}</div>`;
@@ -605,11 +720,11 @@
                 <div class="match">
                     <div class="match-date">
                         <div>${dateStr}</div>
-                        <div class="match-date-competition">${shortenCompetition(match.competition.name)}</div>
+                        <div class="match-date-competition">${match.competition.name}</div>
                     </div>
                     <div class="match-body">
                         <div class="match-opponent">
-                            <span class="sq upcoming">${isAtleticoHome ? 'H' : 'A'}</span>
+                            <span class="sq upcoming">${isHome ? 'H' : 'A'}</span>
                             <span class="name">${opponent}</span>
                         </div>
                     </div>
@@ -620,12 +735,13 @@
 
         function displayStandings(table) {
             const container = document.getElementById('league-table');
-            const atleticoIndex = table.findIndex(t => t.team.id === ATLETICO_MADRID_ID);
+            container.className = '';
+            const ourIndex = table.findIndex(t => t.team.id === currentTeamId);
 
-            // Show top 5 and Atlético if not in top 5
+            // Show top 5 and our club if not in top 5
             let displayTable = table.slice(0, 5);
-            if (atleticoIndex > 4) {
-                displayTable = [...table.slice(0, 4), table[atleticoIndex]];
+            if (ourIndex > 4) {
+                displayTable = [...table.slice(0, 4), table[ourIndex]];
             }
 
             const tableHTML = `
@@ -641,11 +757,12 @@
                     </thead>
                     <tbody>
                         ${displayTable.map(team => {
-                            const isAtletico = team.team.id === ATLETICO_MADRID_ID;
+                            const isOurs = team.team.id === currentTeamId;
+                            const name = isOurs ? currentTeamShortName : team.team.name;
                             return `
-                                <tr class="table-row ${isAtletico ? 'our-team' : ''}">
+                                <tr class="table-row ${isOurs ? 'our-team' : ''}">
                                     <td class="position">${team.position}</td>
-                                    <td class="team-name">${shortenName(team.team.name)}</td>
+                                    <td class="team-name">${name}</td>
                                     <td class="points">${team.playedGames}</td>
                                     <td class="points">${team.goalDifference > 0 ? '+' : ''}${team.goalDifference}</td>
                                     <td class="points"><strong>${team.points}</strong></td>
@@ -659,24 +776,25 @@
             container.innerHTML = tableHTML;
         }
 
-        function positionColorClass(pos) {
-            if (pos === 1) return 'pos-1';
-            if (pos === 2) return 'pos-2';
-            if (pos <= 4) return 'pos-3-4';
-            return 'pos-5plus';
+        function positionColorClass(pos, teamCount, relegationZone) {
+            if (pos === 1) return 'zone-first';
+            if (pos <= 4) return 'zone-top';
+            if (relegationZone && pos > teamCount - relegationZone) return 'zone-relegation';
+            return 'zone-mid';
         }
 
-        function renderPositionChart(history) {
+        function renderPositionChart(history, teamCount, relegationZone) {
             const container = document.getElementById('position-chart');
-            container.classList.remove('loading');
+            container.className = 'position-chart-wrap';
 
             if (!history || history.length === 0) {
-                container.innerHTML = '<div class="empty-state">No matches played yet</div>';
+                container.className = 'empty-state';
+                container.innerHTML = 'No matches played yet';
                 return;
             }
 
             const width = 560, height = 172, padding = 30;
-            const minPos = 1, maxPos = 20;
+            const minPos = 1, maxPos = teamCount || 20;
             const n = history.length;
             const xStep = n > 1 ? (width - padding * 2) / (n - 1) : 0;
             const xFor = (i) => padding + i * xStep;
@@ -684,7 +802,7 @@
 
             const points = history.map((h, i) => `${xFor(i)},${yFor(h.position)}`).join(' ');
             const dots = history.map((h, i) => {
-                const cls = positionColorClass(h.position);
+                const cls = positionColorClass(h.position, maxPos, relegationZone);
                 return `<circle class="chart-dot ${cls}" cx="${xFor(i)}" cy="${yFor(h.position)}" r="3.5"><title>Matchday ${h.matchday}: #${h.position}</title></circle>` +
                     `<text class="chart-label" x="${xFor(i)}" y="${yFor(h.position) - 10}">${h.position}</text>`;
             }).join('');
@@ -692,8 +810,8 @@
 
             container.innerHTML = `
                 <svg viewBox="0 0 ${width} ${height}" width="100%" height="${height}">
-                    <line class="chart-grid" x1="${padding}" y1="${yFor(1)}" x2="${width - padding}" y2="${yFor(1)}" stroke-width="1" />
-                    <line class="chart-grid" x1="${padding}" y1="${yFor(20)}" x2="${width - padding}" y2="${yFor(20)}" stroke-width="1" />
+                    <line class="chart-grid" x1="${padding}" y1="${yFor(minPos)}" x2="${width - padding}" y2="${yFor(minPos)}" stroke-width="1" />
+                    <line class="chart-grid" x1="${padding}" y1="${yFor(maxPos)}" x2="${width - padding}" y2="${yFor(maxPos)}" stroke-width="1" />
                     <polyline class="chart-line" points="${points}" fill="none" stroke-width="2" />
                     ${dots}
                 </svg>
@@ -711,7 +829,7 @@
             if (sq.opponent) {
                 const date = new Date(sq.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
                 const score = sq.score ? ` (${sq.score.home}-${sq.score.away})` : '';
-                return `${date} vs ${shortenName(sq.opponent)}${score}`;
+                return `${date} vs ${sq.opponent}${score}`;
             }
             return sq.state === 'eliminated' ? 'Not reached' : 'Not yet scheduled';
         }
@@ -723,19 +841,19 @@
             }).join('');
         }
 
-        function renderPdForm(form) {
-            const container = document.getElementById('pd-form');
-            container.classList.remove('loading');
+        function renderLeagueForm(form) {
+            const container = document.getElementById('league-form');
             if (!form || form.length === 0) {
-                container.innerHTML = '<div class="empty-state">No matches yet</div>';
+                container.className = 'empty-state';
+                container.innerHTML = 'No matches yet';
                 return;
             }
             container.className = 'squares-rows';
 
             const mid = Math.ceil(form.length / 2);
             const rows = [form.slice(0, mid), form.slice(mid)];
-            container.innerHTML = rows.map((_, i) => `<div class="squares" id="pd-form-row-${i}"></div>`).join('');
-            rows.forEach((row, i) => renderSquares(document.getElementById(`pd-form-row-${i}`), row));
+            container.innerHTML = rows.map((_, i) => `<div class="squares" id="league-form-row-${i}"></div>`).join('');
+            rows.forEach((row, i) => renderSquares(document.getElementById(`league-form-row-${i}`), row));
         }
 
         function renderClForm(championsLeague) {
@@ -770,11 +888,14 @@
             errorContainer.innerHTML = `<div class="error">${message}</div>`;
         }
 
-        // Fetch data on page load
-        fetchData();
+        initSelectors();
 
-        // Refresh data every 5 minutes
-        setInterval(fetchData, 5 * 60 * 1000);
+        // Refresh the currently selected club's data every 5 minutes
+        setInterval(() => {
+            if (currentTeamId && currentCompetition) {
+                loadClubData(currentCompetition, currentTeamId);
+            }
+        }, 5 * 60 * 1000);
     </script>
 </body>
 </html>

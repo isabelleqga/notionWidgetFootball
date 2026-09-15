@@ -1,4 +1,4 @@
-// Atlético Madrid Widget Backend Server
+// Football Club Widget Backend Server
 // Simple Express server that proxies API calls to football-data.org
 
 const express = require('express');
@@ -22,7 +22,6 @@ app.use(express.static('.'));
 const PORT = process.env.PORT || 3000;
 const API_KEY = process.env.API_KEY;
 const BASE_URL = 'https://api.football-data.org/v4';
-const ATLETICO_MADRID_ID = 78;
 
 // Validation
 if (!API_KEY) {
@@ -30,6 +29,49 @@ if (!API_KEY) {
 }
 
 const AUTH_HEADERS = { 'X-Auth-Token': API_KEY };
+
+// Domestic round-robin leagues selectable in the widget, grouped by country.
+// (Continental/cup competitions like Copa Libertadores aren't included here —
+// their format doesn't fit the "table + position history" model below.)
+const LEAGUE_DISPLAY_NAMES = {
+  PL: 'Premier League',
+  ELC: 'Championship',
+  PD: 'La Liga',
+  SA: 'Serie A',
+  BL1: 'Bundesliga',
+  FL1: 'Ligue 1',
+  DED: 'Eredivisie',
+  PPL: 'Primeira Liga',
+  BSA: 'Brazil Série A',
+  CL: 'UCL',
+};
+
+// Number of table positions treated as the relegation zone, for the position
+// chart's coloring. Approximate: several leagues (Bundesliga, Ligue 1,
+// Eredivisie) actually relegate fewer teams directly and send one more to a
+// relegation playoff — that playoff spot is folded into this count here,
+// since the widget only has one "at risk" color to show.
+const RELEGATION_ZONES = {
+  PL: 3, ELC: 3, PD: 3, SA: 3, BL1: 3, FL1: 3, DED: 3, PPL: 3, BSA: 4,
+};
+
+const DOMESTIC_LEAGUES = [
+  { code: 'PL', country: 'England' },
+  { code: 'ELC', country: 'England' },
+  { code: 'PD', country: 'Spain' },
+  { code: 'SA', country: 'Italy' },
+  { code: 'BL1', country: 'Germany' },
+  { code: 'FL1', country: 'France' },
+  { code: 'DED', country: 'Netherlands' },
+  { code: 'PPL', country: 'Portugal' },
+  { code: 'BSA', country: 'Brazil' },
+].map((l) => ({ ...l, name: LEAGUE_DISPLAY_NAMES[l.code], relegationZone: RELEGATION_ZONES[l.code] }));
+
+const DOMESTIC_LEAGUE_CODES = new Set(DOMESTIC_LEAGUES.map((l) => l.code));
+
+function friendlyCompetitionName(code, fallbackName) {
+  return LEAGUE_DISPLAY_NAMES[code] || fallbackName;
+}
 
 // Fixed shape of the UEFA Champions League knockout bracket (post league-stage).
 // Slot counts reflect the two-legged ties used at every stage except the Final.
@@ -52,6 +94,13 @@ async function fetchJsonOk(url) {
   }
 }
 
+function withFriendlyCompetitionNames(matches) {
+  return matches.map((m) => ({
+    ...m,
+    competition: { ...m.competition, name: friendlyCompetitionName(m.competition.code, m.competition.name) },
+  }));
+}
+
 function matchResultForTeam(match, teamId) {
   if (match.status !== 'FINISHED') return null;
   const isHome = match.homeTeam.id === teamId;
@@ -63,8 +112,8 @@ function matchResultForTeam(match, teamId) {
 }
 
 // Approximates official standings tiebreakers (points, goal difference, goals
-// scored). Does not account for head-to-head records, which La Liga's actual
-// rules use before goal difference in a tie among a subset of teams.
+// scored). Does not account for head-to-head records, which some leagues'
+// actual rules use before goal difference in a tie among a subset of teams.
 function computeStandingsHistory(finishedMatches, teamId) {
   const byMatchday = {};
   finishedMatches.forEach((m) => {
@@ -98,7 +147,7 @@ function computeStandingsHistory(finishedMatches, teamId) {
   return history;
 }
 
-function buildPdForm(matches, teamId) {
+function buildLeagueForm(matches, teamId) {
   return matches
     .slice()
     .sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate))
@@ -199,12 +248,14 @@ function computeUclForm(matches, clStandingsTable, teamId) {
 
 // Health check
 app.get('/', (req, res) => {
-  res.json({ 
-    status: '✅ Atlético Madrid Widget Backend is running',
-    version: '1.0.0',
+  res.json({
+    status: '✅ Football Club Widget Backend is running',
+    version: '2.0.0',
     endpoints: {
       'GET /': 'Health check',
-      'GET /api/atletico-data': 'Get matches and standings'
+      'GET /api/leagues': 'List selectable leagues, grouped by country',
+      'GET /api/clubs?competition=CODE': 'List clubs in a league',
+      'GET /api/club-data?teamId=ID&competition=CODE': 'Get matches, standings and form for a club',
     }
   });
 });
@@ -214,52 +265,97 @@ app.get('/widget', (req, res) => {
   res.sendFile(path.join(__dirname, 'widget.html'));
 });
 
-// Main endpoint: Get Atlético Madrid data
-app.get('/api/atletico-data', async (req, res) => {
-  try {
-    console.log('📡 Fetching Atlético Madrid data...');
+// List of selectable leagues, grouped by country
+app.get('/api/leagues', (req, res) => {
+  res.json({ leagues: DOMESTIC_LEAGUES });
+});
 
-    const [pdMatches, pdStandings, pdAllFinished, clMatches, clStandings] = await Promise.all([
-      fetchJsonOk(`${BASE_URL}/teams/${ATLETICO_MADRID_ID}/matches?competitions=PD`),
-      fetchJsonOk(`${BASE_URL}/competitions/PD/standings`),
-      fetchJsonOk(`${BASE_URL}/competitions/PD/matches?status=FINISHED`),
-      fetchJsonOk(`${BASE_URL}/teams/${ATLETICO_MADRID_ID}/matches?competitions=CL`),
-      fetchJsonOk(`${BASE_URL}/competitions/CL/standings`),
+// List of clubs within a given league
+app.get('/api/clubs', async (req, res) => {
+  const competition = String(req.query.competition || '');
+  if (!DOMESTIC_LEAGUE_CODES.has(competition)) {
+    return res.status(400).json({ error: 'Unknown or unsupported competition code' });
+  }
+
+  const data = await fetchJsonOk(`${BASE_URL}/competitions/${competition}/teams`);
+  if (!data) {
+    return res.status(502).json({ error: 'Failed to fetch clubs from football-data.org' });
+  }
+
+  const clubs = data.teams
+    .map((t) => ({ id: t.id, name: t.name, shortName: t.shortName, tla: t.tla }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  res.json({ competition, clubs });
+});
+
+// Main endpoint: matches, standings, position history and form for one club
+app.get('/api/club-data', async (req, res) => {
+  const competition = String(req.query.competition || '');
+  const teamId = parseInt(req.query.teamId, 10);
+
+  if (!DOMESTIC_LEAGUE_CODES.has(competition)) {
+    return res.status(400).json({ error: 'Unknown or unsupported competition code' });
+  }
+  if (!Number.isInteger(teamId) || teamId <= 0) {
+    return res.status(400).json({ error: 'Invalid teamId' });
+  }
+
+  try {
+    console.log(`📡 Fetching data for team ${teamId} (${competition})...`);
+
+    const [team, leagueMatches, leagueStandings, leagueAllFinished] = await Promise.all([
+      fetchJsonOk(`${BASE_URL}/teams/${teamId}`),
+      fetchJsonOk(`${BASE_URL}/teams/${teamId}/matches?competitions=${competition}`),
+      fetchJsonOk(`${BASE_URL}/competitions/${competition}/standings`),
+      fetchJsonOk(`${BASE_URL}/competitions/${competition}/matches?status=FINISHED`),
     ]);
 
-    // La Liga data is the core of the widget; fail hard if it's unavailable.
-    if (!pdMatches || !pdStandings) {
-      console.error('❌ Failed to fetch core La Liga data');
-      return res.status(500).json({ error: 'Failed to fetch La Liga data from football-data.org' });
+    if (!team || !leagueMatches || !leagueStandings) {
+      console.error('❌ Failed to fetch core league data');
+      return res.status(500).json({ error: 'Failed to fetch league data from football-data.org' });
     }
 
-    const laLigaTable = (pdStandings.standings.find((s) => s.type === 'TOTAL') || pdStandings.standings[0]).table;
-    const positionHistory = pdAllFinished ? computeStandingsHistory(pdAllFinished.matches, ATLETICO_MADRID_ID) : [];
-    const laLigaForm = buildPdForm(pdMatches.matches, ATLETICO_MADRID_ID);
+    const leagueTable = (leagueStandings.standings.find((s) => s.type === 'TOTAL') || leagueStandings.standings[0]).table;
+    const positionHistory = leagueAllFinished ? computeStandingsHistory(leagueAllFinished.matches, teamId) : [];
+    const leagueForm = buildLeagueForm(leagueMatches.matches, teamId);
 
-    // Champions League is best-effort: if any part of it fails, omit the
-    // section entirely rather than failing the whole widget.
+    // Champions League is best-effort and only shown when the club is
+    // actually in it this season; if any part of it fails, omit the section
+    // entirely rather than failing the whole widget.
     let championsLeague = null;
-    if (clMatches) {
-      const clTable = clStandings ? (clStandings.standings.find((s) => s.stage === 'LEAGUE_STAGE') || clStandings.standings[0]).table : null;
-      championsLeague = {
-        matches: clMatches.matches,
-        phases: computeUclForm(clMatches.matches, clTable, ATLETICO_MADRID_ID),
-      };
+    const inChampionsLeague = (team.runningCompetitions || []).some((c) => c.code === 'CL');
+    if (inChampionsLeague) {
+      const [clMatches, clStandings] = await Promise.all([
+        fetchJsonOk(`${BASE_URL}/teams/${teamId}/matches?competitions=CL`),
+        fetchJsonOk(`${BASE_URL}/competitions/CL/standings`),
+      ]);
+      if (clMatches) {
+        const clTable = clStandings ? (clStandings.standings.find((s) => s.stage === 'LEAGUE_STAGE') || clStandings.standings[0]).table : null;
+        championsLeague = {
+          matches: withFriendlyCompetitionNames(clMatches.matches),
+          phases: computeUclForm(clMatches.matches, clTable, teamId),
+        };
+      }
     }
 
     console.log('✅ Data fetched successfully');
-    console.log(`   - La Liga matches: ${pdMatches.matches.length}, standings: ${laLigaTable.length} teams`);
-    console.log(`   - Champions League: ${championsLeague ? championsLeague.matches.length + ' matches' : 'unavailable'}`);
+    console.log(`   - ${team.name}: ${leagueMatches.matches.length} league matches, standings: ${leagueTable.length} teams`);
+    console.log(`   - Champions League: ${championsLeague ? championsLeague.matches.length + ' matches' : 'not applicable'}`);
 
     res.json({
       success: true,
       timestamp: new Date().toISOString(),
-      laLiga: {
-        matches: pdMatches.matches,
-        standings: laLigaTable,
+      team: { id: team.id, name: team.name, shortName: team.shortName, crest: team.crest },
+      league: {
+        code: competition,
+        name: friendlyCompetitionName(competition, competition),
+        matches: withFriendlyCompetitionNames(leagueMatches.matches),
+        standings: leagueTable,
         positionHistory,
-        form: laLigaForm,
+        form: leagueForm,
+        teamCount: leagueTable.length,
+        relegationZone: RELEGATION_ZONES[competition] || 0,
       },
       championsLeague,
     });
@@ -275,11 +371,13 @@ app.get('/api/atletico-data', async (req, res) => {
 
 // 404 handler
 app.use((req, res) => {
-  res.status(404).json({ 
+  res.status(404).json({
     error: 'Endpoint not found',
     availableEndpoints: [
       'GET /',
-      'GET /api/atletico-data',
+      'GET /api/leagues',
+      'GET /api/clubs?competition=CODE',
+      'GET /api/club-data?teamId=ID&competition=CODE',
       'GET /widget'
     ]
   });
@@ -289,20 +387,19 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`
 ╔════════════════════════════════════════╗
-║  ⚽ Atlético Madrid Widget Backend      ║
+║  ⚽ Football Club Widget Backend        ║
 ╚════════════════════════════════════════╝
 
 🚀 Server running on: http://localhost:${PORT}
 
 📊 Available endpoints:
    • GET http://localhost:${PORT}/
-   • GET http://localhost:${PORT}/api/atletico-data
+   • GET http://localhost:${PORT}/api/leagues
+   • GET http://localhost:${PORT}/api/clubs?competition=CODE
+   • GET http://localhost:${PORT}/api/club-data?teamId=ID&competition=CODE
    • GET http://localhost:${PORT}/widget
 
-🔑 API Key: ${API_KEY.substring(0, 8)}...
-
-💡 Update your widget with:
-   const backendUrl = 'http://localhost:${PORT}/api/atletico-data';
+🔑 API Key: ${API_KEY ? API_KEY.substring(0, 8) + '...' : 'NOT SET'}
 
 📝 Press Ctrl+C to stop
   `);
