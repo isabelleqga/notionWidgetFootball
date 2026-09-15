@@ -79,7 +79,7 @@ Escolha uma opção e aponte a constante `backendUrl` do `widget.html` para ela.
 
 ## 📝 Usando o Widget
 
-**Localmente:** inicie o servidor (`npm start`), abra o widget e escolha um país e depois um clube nos menus suspensos. Os dados são atualizados automaticamente a cada 5 minutos.
+**Localmente:** inicie o servidor (`npm start`), abra o widget e escolha um país e depois um clube nos menus suspensos.
 
 **No Notion:**
 1. Defina o `backendUrl` no `widget.html` com a URL do seu backend implantado
@@ -100,7 +100,6 @@ Escolha uma opção e aponte a constante `backendUrl` do `widget.html` para ela.
 - Últimos 2 resultados + próximos 2 jogos (adversário, mandante/visitante, placar ou horário do jogo em formato 24h)
 - Uma única seção de Liga com Tabela (uma janela de 5 times centrada no seu clube, limitada ao topo/fundo da tabela), Evolução na tabela (colorida por zona: candidato ao título / G4 / meio de tabela / rebaixamento, com o número da posição indicado apenas quando ela muda) e Forma — além de uma seção equivalente para a Champions League quando o clube está disputando a competição nesta temporada
 - Forma recente em uma grade de quadrados de vitória/empate/derrota/próximo jogo
-- Atualização automática a cada 5 minutos
 - A escolha do clube é lembrada por navegador (`localStorage`); os menus suspensos de país/clube podem ser ocultados depois que você escolhe um clube (ficam ocultos por padrão depois disso) e podem ser reabertos a qualquer momento pelo link "Change club"
 - Um seletor de layout (⚙ ao lado de "Change club") alterna entre **Scroll** (padrão), **Tabs** (uma seção por vez) e **Side-by-side** (seções como cartões lado a lado, esticando para preencher a largura do embed e dividindo a Liga em um cartão de Tabela + um cartão de Posição/Forma) — lembrado por navegador
 - Segue a aparência padrão do próprio Notion — mesma fonte e a mesma paleta de cores clara/escura usada nas páginas do Notion

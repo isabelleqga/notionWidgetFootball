@@ -1258,13 +1258,6 @@
 
         initLayoutControls();
         initSelectors();
-
-        // Refresh the currently selected club's data every 5 minutes
-        setInterval(() => {
-            if (currentTeamId && currentCompetition) {
-                loadClubData(currentCompetition, currentTeamId);
-            }
-        }, 5 * 60 * 1000);
     </script>
 </body>
 </html>

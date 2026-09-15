@@ -79,7 +79,7 @@ Pick one, then point `widget.html`'s `backendUrl` constant at it.
 
 ## 📝 Using the Widget
 
-**Locally:** start the server (`npm start`), open the widget, and pick a country then a club from the dropdowns. Data refreshes every 5 minutes automatically.
+**Locally:** start the server (`npm start`), open the widget, and pick a country then a club from the dropdowns.
 
 **In Notion:**
 1. Set `backendUrl` in `widget.html` to your deployed backend's URL
@@ -100,7 +100,6 @@ Pick one, then point `widget.html`'s `backendUrl` constant at it.
 - Last 2 results + next 2 fixtures (opponent, home/away, score or 24h kickoff time)
 - A single League section with Table (a 5-team window centered on your club, clamped at the top/bottom of the table), Position progress (color-coded by table zone: title contender / top 4 / mid-table / relegation, with the position number only labeled where it changes), and Form — plus a matching Champions League section when the club is in it this season
 - Recent form as a grid of win/draw/loss/upcoming squares
-- Auto-refresh every 5 minutes
 - Club selection remembered per browser (`localStorage`); the country/club dropdowns can be hidden once you've picked a club (they default to hidden after that) and reopened anytime via the "Change club" link
 - A layout picker (⚙ next to "Change club") switches between **Scroll** (default), **Tabs** (one section at a time), and **Side-by-side** (sections as cards in a row, stretching to fill the embed's width and splitting League into a Table card + a Position/Form card) — remembered per browser
 - Matches Notion's own default look — same font, and the same light/dark background palette Notion pages use
