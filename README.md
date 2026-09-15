@@ -26,7 +26,7 @@ A real-time widget for Notion (or any embeddable page) showing matches, standing
    PORT=3000
    API_KEY=your_football_data_org_api_key_here
    ```
-   (see [API Key](#-api-key) below for how to get one)
+   (see "API Key & Security" below for how to get one)
 3. **Start the server**:
    ```bash
    npm start
