@@ -94,7 +94,7 @@ Pick one, then point `widget.html`'s `backendUrl` constant at it.
 
 ## 📊 Features
 
-- Pick any club across Premier League, Championship, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, and Brazil's Série A
+- Pick any club across Premier League, Championship, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, and Brasileirão
 - Last 2 results + next 2 fixtures (opponent, home/away, score or 24h kickoff time)
 - League table (top 5 + your club)
 - Position-over-time chart, color-coded by table zone (title contender / top 4 / mid-table / relegation)
@@ -157,7 +157,7 @@ Académico de Viseu FC, Casa Pia AC, CD Nacional, CD Santa Clara, CF Estrela da 
 </details>
 
 <details>
-<summary><strong>Brazil Série A</strong> (Brazil) — 20 clubs</summary>
+<summary><strong>Brasileirão</strong> (Brazil) — 20 clubs</summary>
 
 Botafogo FR, CA Mineiro, CA Paranaense, Chapecoense AF, Clube do Remo, Coritiba FBC, CR Flamengo, CR Vasco da Gama, Cruzeiro EC, EC Bahia, EC Vitória, Fluminense FC, Grêmio FBPA, Mirassol FC, RB Bragantino, Santos FC, São Paulo FC, SC Corinthians Paulista, SC Internacional, SE Palmeiras
 </details>

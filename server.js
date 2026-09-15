@@ -42,7 +42,7 @@ const LEAGUE_DISPLAY_NAMES = {
   FL1: 'Ligue 1',
   DED: 'Eredivisie',
   PPL: 'Primeira Liga',
-  BSA: 'Brazil Série A',
+  BSA: 'Brasileirão',
   CL: 'UCL',
 };
 
