@@ -96,7 +96,7 @@ Pick one, then point `widget.html`'s `backendUrl` constant at it.
 
 - Pick any club across Premier League, Championship, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, and Brasileirão
 - Last 2 results + next 2 fixtures (opponent, home/away, score or 24h kickoff time)
-- League table (top 5 + your club)
+- League table showing a 5-team window centered on your club (clamped at the top/bottom of the table)
 - Position-over-time chart, color-coded by table zone (title contender / top 4 / mid-table / relegation)
 - Recent form as a grid of win/draw/loss/upcoming squares
 - Champions League form and bracket progress, shown automatically when the club is in it this season

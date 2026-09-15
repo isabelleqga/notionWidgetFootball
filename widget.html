@@ -738,11 +738,12 @@
             container.className = '';
             const ourIndex = table.findIndex(t => t.team.id === currentTeamId);
 
-            // Show top 5 and our club if not in top 5
-            let displayTable = table.slice(0, 5);
-            if (ourIndex > 4) {
-                displayTable = [...table.slice(0, 4), table[ourIndex]];
-            }
+            // Show a 5-team window centered on our club, clamped to the table's edges
+            // (e.g. 1st shows 4 below, last shows 4 above, 2nd-to-last shows 3 above + 1 below).
+            const windowSize = Math.min(5, table.length);
+            let start = ourIndex === -1 ? 0 : ourIndex - 2;
+            start = Math.max(0, Math.min(start, table.length - windowSize));
+            const displayTable = table.slice(start, start + windowSize);
 
             const tableHTML = `
                 <table class="league-table">
