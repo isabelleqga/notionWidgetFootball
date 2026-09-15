@@ -111,55 +111,55 @@ Pick one, then point `widget.html`'s `backendUrl` constant at it.
 The exact roster depends on football-data.org's current season data (promotions, relegations, name changes will shift this over time) — this is what's selectable today. Any of these clubs that's also in the Champions League this season gets the extra Champions League section automatically.
 
 <details>
-<summary><strong>Premier League</strong> (🏴󠁧󠁢󠁥󠁮󠁧󠁿 England) — 20 clubs</summary>
+<summary><strong>Premier League</strong> (England) — 20 clubs</summary>
 
 AFC Bournemouth, Arsenal FC, Aston Villa FC, Brentford FC, Brighton & Hove Albion FC, Chelsea FC, Coventry City FC, Crystal Palace FC, Everton FC, Fulham FC, Hull City AFC, Ipswich Town FC, Leeds United FC, Liverpool FC, Manchester City FC, Manchester United FC, Newcastle United FC, Nottingham Forest FC, Sunderland AFC, Tottenham Hotspur FC
 </details>
 
 <details>
-<summary><strong>Championship</strong> (🏴󠁧󠁢󠁥󠁮󠁧󠁿 England) — 24 clubs</summary>
+<summary><strong>Championship</strong> (England) — 24 clubs</summary>
 
 Birmingham City FC, Blackburn Rovers FC, Bolton Wanderers FC, Bristol City FC, Burnley FC, Cardiff City FC, Charlton Athletic FC, Derby County FC, Lincoln City FC, Middlesbrough FC, Millwall FC, Norwich City FC, Portsmouth FC, Preston North End FC, Queens Park Rangers FC, Sheffield United FC, Southampton FC, Stoke City FC, Swansea City AFC, Watford FC, West Bromwich Albion FC, West Ham United FC, Wolverhampton Wanderers FC, Wrexham AFC
 </details>
 
 <details>
-<summary><strong>La Liga</strong> (🇪🇸 Spain) — 20 clubs</summary>
+<summary><strong>La Liga</strong> (Spain) — 20 clubs</summary>
 
 Athletic Club, CA Osasuna, Club Atlético de Madrid, Deportivo Alavés, Elche CF, FC Barcelona, Getafe CF, Levante UD, Málaga CF, Rayo Vallecano de Madrid, RC Celta de Vigo, RC Deportivo La Coruña, RCD Espanyol de Barcelona, Real Betis Balompié, Real Madrid CF, Real Racing Club de Santander, Real Sociedad de Fútbol, Sevilla FC, Valencia CF, Villarreal CF
 </details>
 
 <details>
-<summary><strong>Serie A</strong> (🇮🇹 Italy) — 20 clubs</summary>
+<summary><strong>Serie A</strong> (Italy) — 20 clubs</summary>
 
 AC Milan, AC Monza, ACF Fiorentina, AS Roma, Atalanta BC, Bologna FC 1909, Cagliari Calcio, Como 1907, FC Internazionale Milano, Frosinone Calcio, Genoa CFC, Juventus FC, Parma Calcio 1913, SS Lazio, SSC Napoli, Torino FC, Udinese Calcio, US Lecce, US Sassuolo Calcio, Venezia FC
 </details>
 
 <details>
-<summary><strong>Bundesliga</strong> (🇩🇪 Germany) — 18 clubs</summary>
+<summary><strong>Bundesliga</strong> (Germany) — 18 clubs</summary>
 
 1. FC Köln, 1. FC Union Berlin, 1. FSV Mainz 05, Bayer 04 Leverkusen, Borussia Dortmund, Borussia Mönchengladbach, Eintracht Frankfurt, FC Augsburg, FC Bayern München, FC Schalke 04, Hamburger SV, RB Leipzig, SC Freiburg, SC Paderborn 07, SV 07 Elversberg, SV Werder Bremen, TSG 1899 Hoffenheim, VfB Stuttgart
 </details>
 
 <details>
-<summary><strong>Ligue 1</strong> (🇫🇷 France) — 18 clubs</summary>
+<summary><strong>Ligue 1</strong> (France) — 18 clubs</summary>
 
 AJ Auxerre, Angers SCO, AS Monaco FC, ES Troyes AC, FC Lorient, Le Havre AC, Le Mans FC, Lille OSC, OGC Nice, Olympique de Marseille, Olympique Lyonnais, Paris FC, Paris Saint-Germain FC, Racing Club de Lens, RC Strasbourg Alsace, Stade Brestois 29, Stade Rennais FC 1901, Toulouse FC
 </details>
 
 <details>
-<summary><strong>Eredivisie</strong> (🇳🇱 Netherlands) — 18 clubs</summary>
+<summary><strong>Eredivisie</strong> (Netherlands) — 18 clubs</summary>
 
 ADO Den Haag, AFC Ajax, AZ, FC Groningen, FC Twente '65, FC Utrecht, Feyenoord Rotterdam, Fortuna Sittard, Go Ahead Eagles, NEC, PEC Zwolle, PSV, SBV Excelsior, SC Cambuur-Leeuwarden, SC Heerenveen, Sparta Rotterdam, Telstar 1963, Willem II Tilburg
 </details>
 
 <details>
-<summary><strong>Primeira Liga</strong> (🇵🇹 Portugal) — 18 clubs</summary>
+<summary><strong>Primeira Liga</strong> (Portugal) — 18 clubs</summary>
 
 Académico de Viseu FC, Casa Pia AC, CD Nacional, CD Santa Clara, CF Estrela da Amadora, CS Marítimo, FC Alverca, FC Arouca, FC Famalicão, FC Porto, GD Estoril Praia, Gil Vicente FC, Moreirense FC, Rio Ave FC, Sport Lisboa e Benfica, Sporting Clube de Braga, Sporting Clube de Portugal, Vitória SC
 </details>
 
 <details>
-<summary><strong>Brasileirão</strong> (🇧🇷 Brazil) — 20 clubs</summary>
+<summary><strong>Brasileirão</strong> (Brazil) — 20 clubs</summary>
 
 Botafogo FR, CA Mineiro, CA Paranaense, Chapecoense AF, Clube do Remo, Coritiba FBC, CR Flamengo, CR Vasco da Gama, Cruzeiro EC, EC Bahia, EC Vitória, Fluminense FC, Grêmio FBPA, Mirassol FC, RB Bragantino, Santos FC, São Paulo FC, SC Corinthians Paulista, SC Internacional, SE Palmeiras
 </details>
