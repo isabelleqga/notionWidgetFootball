@@ -62,11 +62,14 @@ Escolha uma opção e aponte a constante `backendUrl` do `widget.html` para ela.
 </details>
 
 <details>
-<summary><strong>Vercel</strong> — hospedagem gratuita na nuvem</summary>
+<summary><strong>Vercel</strong> — hospedagem gratuita na nuvem, recomendado</summary>
 
 1. Acesse https://vercel.com e conecte sua conta do GitHub
-2. Importe este repositório e faça o deploy
-3. Copie a URL do Vercel e defina-a como `backendUrl` no `widget.html`
+2. Importe este repositório e faça o deploy — o Vercel detecta o Express automaticamente, sem configuração extra
+3. Em **Settings → Environment Variables** do projeto, adicione `API_KEY` (veja "Chave de API e Segurança" abaixo)
+4. Copie a URL do Vercel e defina-a como `backendUrl` no `widget.html`, depois faça push para reimplantar
+
+O Vercel também serve a própria página do widget, em `<sua-url-vercel>/widget` — essa é a única opção aqui em que você não precisa hospedar o frontend separadamente. Veja "Usando o Widget" abaixo para incorporar essa URL diretamente no Notion em vez de colar o HTML.
 </details>
 
 <details>
@@ -81,11 +84,15 @@ Escolha uma opção e aponte a constante `backendUrl` do `widget.html` para ela.
 
 **Localmente:** inicie o servidor (`npm start`), abra o widget e escolha um país e depois um clube nos menus suspensos.
 
-**No Notion:**
-1. Defina o `backendUrl` no `widget.html` com a URL do seu backend implantado
-2. Copie todo o conteúdo do `widget.html`
-3. No Notion: **+ Add Block** → **Embed**, depois cole o HTML
-4. Escolha um clube — sua escolha é lembrada naquele navegador para a próxima vez, e o seletor se esconde automaticamente depois disso (clique em "Change club" para trazê-lo de volta)
+**No Notion**, escolha uma opção:
+
+- **Incorporar a URL diretamente** (somente quando o backend também serve a própria página do widget, ex.: implantado no Vercel): **+ Add Block** → **Embed**, depois cole `<sua-url-vercel>/widget`. O Notion carrega em um iframe — nada para copiar ou colar novamente depois de mudanças futuras, já que sempre reflete o que está implantado no momento.
+- **Colar o HTML** (funciona com qualquer hospedagem de backend):
+  1. Defina o `backendUrl` no `widget.html` com a URL do seu backend implantado
+  2. Copie todo o conteúdo do `widget.html`
+  3. No Notion: **+ Add Block** → **Embed**, depois cole o HTML
+
+De qualquer forma: escolha um clube — sua escolha é lembrada naquele navegador para a próxima vez, e o seletor se esconde automaticamente depois disso (clique em "Change club" para trazê-lo de volta)
 
 ## 🔑 Chave de API e Segurança
 

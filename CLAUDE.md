@@ -47,7 +47,7 @@ To exercise the whole thing locally: start the backend (`npm start`), then open 
     - `refreshLayout()` is the single source of truth reconciling layout mode, active tab, and Champions League applicability — call it after any state change instead of toggling `style.display` directly.
   - Font and background/text/border colors are set to match Notion's own default theme (light: white page / `#f1f1ef` card fill; dark: `#191919` page / `#2f2f2f` card fill), not a custom palette — semantic colors (win/draw/loss, table zones, warning/error) are intentionally left alone since they're functional signals, not part of the background palette.
 
-- **Deployment model**: the backend and frontend are deployed independently. The backend can run locally or be pushed to Replit/Vercel/Heroku (see README for the exact steps); after any backend redeploy, `backendUrl` in `widget.html` must be updated to match, and the updated HTML re-pasted into the Notion embed block.
+- **Deployment model**: the backend can run locally or be pushed to Replit/Vercel/Heroku (see README for the exact steps). On Vercel specifically, `server.js` exports the Express `app` (`module.exports = app`, with `app.listen()` guarded behind `require.main === module` so local dev is unaffected) so Vercel's Express framework preset can run it as a Function with zero extra config — this also means the deployed backend serves the frontend itself at `<url>/widget`, so Notion can embed that URL directly instead of needing the HTML pasted in. For any deployment target, after a backend redeploy `backendUrl` in `widget.html` must be updated to match; if the HTML was pasted into Notion (rather than embedded by URL) it also needs re-pasting.
 
 ## Notes for making changes
 

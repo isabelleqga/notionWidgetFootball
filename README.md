@@ -62,11 +62,14 @@ Pick one, then point `widget.html`'s `backendUrl` constant at it.
 </details>
 
 <details>
-<summary><strong>Vercel</strong> — free cloud hosting</summary>
+<summary><strong>Vercel</strong> — free cloud hosting, recommended</summary>
 
 1. Go to https://vercel.com and connect your GitHub account
-2. Import this repository and deploy
-3. Copy your Vercel URL and set it as `backendUrl` in `widget.html`
+2. Import this repository and deploy — Vercel auto-detects Express, no extra config needed
+3. In the project's **Settings → Environment Variables**, add `API_KEY` (see "API Key & Security" below)
+4. Copy your Vercel URL and set it as `backendUrl` in `widget.html`, then push to redeploy
+
+Vercel serves the widget page itself too, at `<your-vercel-url>/widget` — so this is the only option here where you don't need to separately host the frontend. See "Using the Widget" below for embedding that URL directly in Notion instead of copy-pasting HTML.
 </details>
 
 <details>
@@ -81,11 +84,15 @@ Pick one, then point `widget.html`'s `backendUrl` constant at it.
 
 **Locally:** start the server (`npm start`), open the widget, and pick a country then a club from the dropdowns.
 
-**In Notion:**
-1. Set `backendUrl` in `widget.html` to your deployed backend's URL
-2. Copy the entire contents of `widget.html`
-3. In Notion: **+ Add Block** → **Embed**, then paste the HTML
-4. Pick a club — your choice is remembered in that browser for next time, and the selector hides itself automatically after that (click "Change club" to bring it back)
+**In Notion**, pick one:
+
+- **Embed the URL directly** (only when the backend also serves the widget page itself, e.g. deployed on Vercel): **+ Add Block** → **Embed**, then paste `<your-vercel-url>/widget`. Notion loads it in an iframe — nothing to copy or re-paste after future changes, since it always reflects whatever's currently deployed.
+- **Paste the HTML** (works with any backend host):
+  1. Set `backendUrl` in `widget.html` to your deployed backend's URL
+  2. Copy the entire contents of `widget.html`
+  3. In Notion: **+ Add Block** → **Embed**, then paste the HTML
+
+Either way: pick a club — your choice is remembered in that browser for next time, and the selector hides itself automatically after that (click "Change club" to bring it back)
 
 ## 🔑 API Key & Security
 
