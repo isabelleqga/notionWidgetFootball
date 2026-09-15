@@ -960,8 +960,11 @@
             }
             container.className = 'squares-rows';
 
-            const mid = Math.ceil(form.length / 2);
-            const rows = [form.slice(0, mid), form.slice(mid)];
+            // Always split into two equal-length rows; if there's an odd match
+            // out, drop the oldest one rather than showing uneven rows.
+            const trimmed = form.length % 2 === 0 ? form : form.slice(1);
+            const half = trimmed.length / 2;
+            const rows = [trimmed.slice(0, half), trimmed.slice(half)];
             container.innerHTML = rows.map((_, i) => `<div class="squares" id="league-form-row-${i}"></div>`).join('');
             rows.forEach((row, i) => renderSquares(document.getElementById(`league-form-row-${i}`), row));
         }
