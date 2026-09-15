@@ -383,9 +383,11 @@ app.use((req, res) => {
   });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`
+// Start the server locally only (Vercel imports `app` as a Function instead
+// of running this file directly, so app.listen() must not run there).
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`
 ╔════════════════════════════════════════╗
 ║  ⚽ Football Club Widget Backend        ║
 ╚════════════════════════════════════════╝
@@ -402,11 +404,14 @@ app.listen(PORT, () => {
 🔑 API Key: ${API_KEY ? API_KEY.substring(0, 8) + '...' : 'NOT SET'}
 
 📝 Press Ctrl+C to stop
-  `);
-});
+    `);
+  });
 
-// Handle errors
-process.on('uncaughtException', (error) => {
-  console.error('❌ Uncaught Exception:', error);
-  process.exit(1);
-});
+  // Handle errors
+  process.on('uncaughtException', (error) => {
+    console.error('❌ Uncaught Exception:', error);
+    process.exit(1);
+  });
+}
+
+module.exports = app;
