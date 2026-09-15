@@ -1165,8 +1165,9 @@
             const points = history.map((h, i) => `${xFor(i)},${yFor(h.position)}`).join(' ');
             const dots = history.map((h, i) => {
                 const cls = positionColorClass(h.position, maxPos, relegationZone);
-                return `<circle class="chart-dot ${cls}" cx="${xFor(i)}" cy="${yFor(h.position)}" r="3.5"><title>Matchday ${h.matchday}: #${h.position}</title></circle>` +
-                    `<text class="chart-label" x="${xFor(i)}" y="${yFor(h.position) - 10}">${h.position}</text>`;
+                const changed = i === 0 || h.position !== history[i - 1].position;
+                const label = changed ? `<text class="chart-label" x="${xFor(i)}" y="${yFor(h.position) - 10}">${h.position}</text>` : '';
+                return `<circle class="chart-dot ${cls}" cx="${xFor(i)}" cy="${yFor(h.position)}" r="3.5"><title>Matchday ${h.matchday}: #${h.position}</title></circle>${label}`;
             }).join('');
             const last = history[history.length - 1];
 
