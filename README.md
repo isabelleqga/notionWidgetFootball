@@ -1,5 +1,7 @@
 # Football Club Widget
 
+**Languages:** [English](README.md) | [Português (Brasil)](README.pt-BR.md)
+
 A real-time widget for Notion (or any embeddable page) showing matches, standings, position history, and recent form for a football club you pick from a dropdown — any club across 9 domestic leagues in 8 countries, via [football-data.org](https://www.football-data.org/).
 
 ## 📦 What's Included
