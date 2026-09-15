@@ -100,6 +100,8 @@ Pick one, then point `widget.html`'s `backendUrl` constant at it.
 - Recent form as a grid of win/draw/loss/upcoming squares
 - Auto-refresh every 5 minutes
 - Club selection remembered per browser (`localStorage`); the country/club dropdowns can be hidden once you've picked a club (they default to hidden after that) and reopened anytime via the "Change club" link
+- A layout picker (⚙ next to "Change club") switches between **Scroll** (default), **Tabs** (one section at a time), and **Side-by-side** (sections as cards in a row, stretching to fill the embed's width and splitting League into a Table card + a Position/Form card) — remembered per browser
+- Matches Notion's own default look — same font, and the same light/dark background palette Notion pages use
 - Light/dark theme aware, fully responsive — including narrow Notion columns (down to ~240px, e.g. a page split into 3+ columns)
 
 ## ⚽ Available Leagues & Clubs
