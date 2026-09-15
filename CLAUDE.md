@@ -42,6 +42,7 @@ To exercise the whole thing locally: start the backend (`npm start`), then open 
 
 ## Notes for making changes
 
+- `package.json`'s `name`/`description`/`keywords` (`atletico-madrid-widget`, "Live Atlético Madrid widget...") are stale from before the widget was generalized to any club/league — ignore them as a scoping signal; the widget is club-agnostic.
 - Adding a league: add an entry to `DOMESTIC_LEAGUES` in `server.js` with its `code`/`country`, a friendly name in `LEAGUE_DISPLAY_NAMES`, and a relegation-zone size in `RELEGATION_ZONES`. Only round-robin domestic leagues fit this model — cup/group competitions (e.g. Copa Libertadores) don't have a compatible "table + position history" shape.
 - Since `widget.html` is pasted verbatim into Notion, treat it as the deployable artifact: any change to it must remain a single self-contained file (no external script/asset references beyond what Notion's embed sandbox allows).
 - There's no browser automation available for manually verifying UI changes in this environment; the established pattern for checking `widget.html` changes without a live browser is extracting its inline `<script>`, stubbing a minimal `document`, and running the render functions against the live (or a captured) `/api/club-data` response — see prior session transcripts for the stub shape if reconstructing this.

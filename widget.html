@@ -82,21 +82,20 @@
             margin: 0 auto;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
+        .toggle-selector-btn {
+            display: inline-block;
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 4px 8px;
+            flex-shrink: 0;
         }
 
-        .club-name {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: -0.2px;
-        }
-
-        .club-subtitle {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-top: 4px;
+        .toggle-selector-btn:hover {
+            text-decoration: underline;
         }
 
         .selector-row {
@@ -135,6 +134,39 @@
             padding-bottom: 12px;
             margin-bottom: 16px;
             border-bottom: 1px solid var(--border);
+        }
+
+        .section-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-title-row .section-title {
+            padding-bottom: 0;
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+
+        .subsection {
+            margin-top: 20px;
+        }
+
+        .subsection:first-of-type {
+            margin-top: 0;
+        }
+
+        .subtitle {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 10px;
         }
 
         .match {
@@ -210,6 +242,7 @@
         .league-table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
         }
 
         .table-header {
@@ -226,9 +259,9 @@
 
         .table-header th:nth-child(1) { width: 5%; }
         .table-header th:nth-child(2) { width: 50%; }
-        .table-header th:nth-child(3) { width: 15%; }
-        .table-header th:nth-child(4) { width: 15%; }
-        .table-header th:nth-child(5) { width: 15%; }
+        .table-header th:nth-child(3) { width: 15%; text-align: center; }
+        .table-header th:nth-child(4) { width: 15%; text-align: center; }
+        .table-header th:nth-child(5) { width: 15%; text-align: center; }
 
         .table-row {
             border-bottom: 1px solid var(--border);
@@ -255,6 +288,9 @@
 
         .team-name {
             color: var(--text);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .points {
@@ -434,17 +470,70 @@
             letter-spacing: 0.3px;
             white-space: nowrap;
         }
+
+        /* Notion columns can be as narrow as ~240px when a page is split
+           three-plus ways — reclaim space and stack the selectors instead
+           of squeezing everything sideways. */
+        @media (max-width: 380px) {
+            body {
+                padding: 12px;
+            }
+
+            .section {
+                padding: 14px;
+            }
+
+            .section-title,
+            .section-title-row {
+                padding-bottom: 8px;
+                margin-bottom: 10px;
+            }
+
+            .selector-row {
+                flex-direction: column;
+            }
+
+            .match-date-competition {
+                display: none;
+            }
+
+            .match-date {
+                font-size: 11px;
+            }
+
+            .score {
+                min-width: 40px;
+                padding: 6px 8px;
+                font-size: 13px;
+            }
+
+            .table-header th {
+                padding: 6px;
+                font-size: 11px;
+            }
+
+            .table-row td {
+                padding: 6px;
+                font-size: 12px;
+            }
+
+            .sq {
+                width: 14px;
+                height: 14px;
+                font-size: 8px;
+            }
+
+            .legend {
+                gap: 10px;
+                font-size: 10px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <div class="club-name" id="club-name">Football Club Widget</div>
-            <div class="club-subtitle" id="club-subtitle">Pick a country and club below</div>
-        </div>
-
         <!-- Club selector -->
-        <div class="section">
+        <div class="section" id="selector-section">
             <div class="selector-row">
                 <select id="country-select">
                     <option value="">Country…</option>
@@ -460,46 +549,54 @@
 
         <!-- Matches -->
         <div class="section">
-            <div class="section-title">Matches</div>
+            <div class="section-title-row">
+                <div class="section-title" id="matches-title">Matches</div>
+                <button type="button" id="toggle-selector-btn" class="toggle-selector-btn">Hide selector</button>
+            </div>
             <div id="matches-list" class="empty-state">Pick a club above to see matches</div>
         </div>
 
-        <!-- League Table -->
+        <!-- League Info: table, position progress, form -->
         <div class="section">
-            <div class="section-title" id="league-table-title">League Table</div>
-            <div id="league-table" class="empty-state">Pick a club above to see standings</div>
-            <div class="last-updated" id="last-updated"></div>
-        </div>
+            <div class="section-title" id="league-info-title">League</div>
 
-        <!-- League Position Over Time -->
-        <div class="section">
-            <div class="section-title" id="position-chart-title">League Position</div>
-            <div id="position-chart" class="empty-state position-chart-wrap">Pick a club above to see position history</div>
-        </div>
-
-        <!-- League Form Squares -->
-        <div class="section">
-            <div class="section-title" id="league-form-title">Form</div>
-            <div class="legend">
-                <span class="legend-item"><span class="legend-swatch win"></span>Win</span>
-                <span class="legend-item"><span class="legend-swatch draw"></span>Draw</span>
-                <span class="legend-item"><span class="legend-swatch loss"></span>Loss</span>
-                <span class="legend-item"><span class="legend-swatch"></span>Upcoming</span>
+            <div class="subsection">
+                <div class="subtitle">Table</div>
+                <div id="league-table" class="empty-state">Pick a club above to see standings</div>
+                <div class="last-updated" id="last-updated"></div>
             </div>
-            <div id="league-form" class="empty-state">Pick a club above to see recent form</div>
+
+            <div class="subsection">
+                <div class="subtitle">Position progress</div>
+                <div id="position-chart" class="empty-state position-chart-wrap">Pick a club above to see position history</div>
+            </div>
+
+            <div class="subsection">
+                <div class="subtitle">Form</div>
+                <div class="legend">
+                    <span class="legend-item"><span class="legend-swatch win"></span>Win</span>
+                    <span class="legend-item"><span class="legend-swatch draw"></span>Draw</span>
+                    <span class="legend-item"><span class="legend-swatch loss"></span>Loss</span>
+                    <span class="legend-item"><span class="legend-swatch"></span>Upcoming</span>
+                </div>
+                <div id="league-form" class="empty-state">Pick a club above to see recent form</div>
+            </div>
         </div>
 
         <!-- Champions League Form Squares (hidden if not applicable) -->
         <div class="section" id="cl-section" style="display: none;">
-            <div class="section-title">Form — Champions League</div>
-            <div class="legend">
-                <span class="legend-item"><span class="legend-swatch win"></span>Win</span>
-                <span class="legend-item"><span class="legend-swatch draw"></span>Draw</span>
-                <span class="legend-item"><span class="legend-swatch loss"></span>Loss</span>
-                <span class="legend-item"><span class="legend-swatch"></span>Upcoming</span>
-                <span class="legend-item"><span class="legend-swatch eliminated"></span>Out</span>
+            <div class="section-title">Champions League</div>
+            <div class="subsection">
+                <div class="subtitle">Form</div>
+                <div class="legend">
+                    <span class="legend-item"><span class="legend-swatch win"></span>Win</span>
+                    <span class="legend-item"><span class="legend-swatch draw"></span>Draw</span>
+                    <span class="legend-item"><span class="legend-swatch loss"></span>Loss</span>
+                    <span class="legend-item"><span class="legend-swatch"></span>Upcoming</span>
+                    <span class="legend-item"><span class="legend-swatch eliminated"></span>Out</span>
+                </div>
+                <div id="cl-form"></div>
             </div>
-            <div id="cl-form"></div>
         </div>
     </div>
 
@@ -536,9 +633,20 @@
             }
         }
 
+        function setSelectorVisible(visible) {
+            document.getElementById('selector-section').style.display = visible ? '' : 'none';
+            document.getElementById('toggle-selector-btn').textContent = visible ? 'Hide selector' : 'Change club';
+        }
+
         async function initSelectors() {
             const countrySelect = document.getElementById('country-select');
             const clubSelect = document.getElementById('club-select');
+
+            const saved = loadSavedSelection();
+            document.getElementById('toggle-selector-btn').addEventListener('click', () => {
+                setSelectorVisible(document.getElementById('selector-section').style.display === 'none');
+            });
+            setSelectorVisible(!saved);
 
             try {
                 const res = await fetch(`${backendUrl}/api/leagues`);
@@ -563,7 +671,6 @@
             countrySelect.addEventListener('change', () => onCountryChange(countrySelect.value));
             clubSelect.addEventListener('change', () => onClubChange(clubSelect.value));
 
-            const saved = loadSavedSelection();
             if (saved && competitionToCountry[saved.competition]) {
                 countrySelect.value = competitionToCountry[saved.competition];
                 await onCountryChange(countrySelect.value, saved);
@@ -637,11 +744,8 @@
 
                 currentTeamShortName = data.team.shortName || data.team.name;
 
-                document.getElementById('club-name').textContent = data.team.name;
-                document.getElementById('club-subtitle').textContent = data.league.name;
-                document.getElementById('league-table-title').textContent = `${data.league.name} Table`;
-                document.getElementById('position-chart-title').textContent = `${data.league.name} Position`;
-                document.getElementById('league-form-title').textContent = `Form — ${data.league.name}`;
+                document.getElementById('matches-title').textContent = `Matches • ${data.team.name}`;
+                document.getElementById('league-info-title').textContent = data.league.name;
 
                 const allMatches = [
                     ...(data.league.matches || []),
@@ -794,7 +898,12 @@
                 return;
             }
 
-            const width = 560, height = 172, padding = 30;
+            // Draw at the container's actual rendered width so dot/text sizes
+            // stay legible at any width — a fixed 560-unit viewBox would get
+            // scaled down by the browser at narrow widths, shrinking text
+            // unreadably small.
+            const width = Math.max(container.clientWidth, 200);
+            const height = Math.round(width * 0.3), padding = 24;
             const minPos = 1, maxPos = teamCount || 20;
             const n = history.length;
             const xStep = n > 1 ? (width - padding * 2) / (n - 1) : 0;
