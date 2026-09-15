@@ -83,7 +83,7 @@ Pick one, then point `widget.html`'s `backendUrl` constant at it.
 1. Set `backendUrl` in `widget.html` to your deployed backend's URL
 2. Copy the entire contents of `widget.html`
 3. In Notion: **+ Add Block** → **Embed**, then paste the HTML
-4. Pick a club — your choice is remembered in that browser for next time
+4. Pick a club — your choice is remembered in that browser for next time, and the selector hides itself automatically after that (click "Change club" to bring it back)
 
 ## 🔑 API Key & Security
 
@@ -96,13 +96,11 @@ Pick one, then point `widget.html`'s `backendUrl` constant at it.
 
 - Pick any club across Premier League, Championship, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, and Brasileirão
 - Last 2 results + next 2 fixtures (opponent, home/away, score or 24h kickoff time)
-- League table showing a 5-team window centered on your club (clamped at the top/bottom of the table)
-- Position-over-time chart, color-coded by table zone (title contender / top 4 / mid-table / relegation)
+- A single League section with Table (a 5-team window centered on your club, clamped at the top/bottom of the table), Position progress (color-coded by table zone: title contender / top 4 / mid-table / relegation), and Form — plus a matching Champions League section when the club is in it this season
 - Recent form as a grid of win/draw/loss/upcoming squares
-- Champions League form and bracket progress, shown automatically when the club is in it this season
 - Auto-refresh every 5 minutes
-- Club selection remembered per browser (`localStorage`)
-- Light/dark theme aware, fully responsive/mobile-friendly
+- Club selection remembered per browser (`localStorage`); the country/club dropdowns can be hidden once you've picked a club (they default to hidden after that) and reopened anytime via the "Change club" link
+- Light/dark theme aware, fully responsive — including narrow Notion columns (down to ~240px, e.g. a page split into 3+ columns)
 
 ## ⚽ Available Leagues & Clubs
 
