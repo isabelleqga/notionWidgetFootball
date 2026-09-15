@@ -550,6 +550,16 @@
             flex-wrap: nowrap;
         }
 
+        /* Keep both form rows on exactly one line each, shrinking each
+           square (rather than wrapping or overflowing) when the section
+           is too narrow to fit them all at their natural size. */
+        .squares-rows .sq {
+            flex-shrink: 1;
+            min-width: 0;
+            height: auto;
+            aspect-ratio: 1 / 1;
+        }
+
         #cl-form {
             display: flex;
             flex-wrap: wrap;
