@@ -87,10 +87,9 @@ Vercel serves the widget page itself too, at `<your-vercel-url>/widget` — so t
 **In Notion**, pick one:
 
 - **Embed the URL directly** (only when the backend also serves the widget page itself, e.g. deployed on Vercel): **+ Add Block** → **Embed**, then paste `<your-vercel-url>/widget`. Notion loads it in an iframe — nothing to copy or re-paste after future changes, since it always reflects whatever's currently deployed.
-- **Paste the HTML** (works with any backend host):
+- **Upload the HTML file** (works with any backend host — pasting the raw HTML into an Embed block does *not* work in Notion):
   1. Set `backendUrl` in `widget.html` to your deployed backend's URL
-  2. Copy the entire contents of `widget.html`
-  3. In Notion: **+ Add Block** → **Embed**, then paste the HTML
+  2. In Notion, add an **HTML block** and upload your `widget.html` file
 
 Either way: pick a club — your choice is remembered in that browser for next time, and the selector hides itself automatically after that (click "Change club" to bring it back)
 
