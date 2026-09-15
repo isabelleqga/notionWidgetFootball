@@ -107,19 +107,20 @@
             text-decoration: underline;
         }
 
-        .toolbar {
+        .title-row-actions {
             display: flex;
-            justify-content: flex-end;
-            margin-bottom: 12px;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
         }
 
         .icon-btn {
-            background: var(--surface);
+            background: var(--bg);
             border: 1px solid var(--border);
             border-radius: 8px;
-            width: 30px;
-            height: 30px;
-            font-size: 14px;
+            width: 26px;
+            height: 26px;
+            font-size: 13px;
             line-height: 1;
             cursor: pointer;
             color: var(--text-muted);
@@ -136,7 +137,7 @@
         .layout-menu {
             position: absolute;
             right: 0;
-            top: 36px;
+            top: 32px;
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 8px;
@@ -674,18 +675,6 @@
 </head>
 <body>
     <div class="container" id="container">
-        <!-- Layout mode picker -->
-        <div class="toolbar">
-            <div class="layout-picker">
-                <button type="button" id="layout-settings-btn" class="icon-btn" title="Layout settings">⚙</button>
-                <div class="layout-menu" id="layout-menu" style="display: none;">
-                    <button type="button" class="layout-option" data-mode="scroll">Scroll</button>
-                    <button type="button" class="layout-option" data-mode="tabs">Tabs</button>
-                    <button type="button" class="layout-option" data-mode="side-by-side">Side-by-side</button>
-                </div>
-            </div>
-        </div>
-
         <!-- Club selector -->
         <div class="section" id="selector-section">
             <div class="selector-row">
@@ -713,7 +702,17 @@
             <div class="section" id="matches-section">
                 <div class="section-title-row">
                     <div class="section-title" id="matches-title">Matches</div>
-                    <button type="button" id="toggle-selector-btn" class="toggle-selector-btn">Hide selector</button>
+                    <div class="title-row-actions">
+                        <button type="button" id="toggle-selector-btn" class="toggle-selector-btn">Hide selector</button>
+                        <div class="layout-picker">
+                            <button type="button" id="layout-settings-btn" class="icon-btn" title="Layout settings">⚙</button>
+                            <div class="layout-menu" id="layout-menu" style="display: none;">
+                                <button type="button" class="layout-option" data-mode="scroll">Scroll</button>
+                                <button type="button" class="layout-option" data-mode="tabs">Tabs</button>
+                                <button type="button" class="layout-option" data-mode="side-by-side">Side-by-side</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div id="matches-list" class="empty-state">Pick a club above to see matches</div>
             </div>
