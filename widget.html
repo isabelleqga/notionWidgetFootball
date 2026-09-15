@@ -103,6 +103,101 @@
             text-decoration: underline;
         }
 
+        .toolbar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 12px;
+        }
+
+        .icon-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            width: 30px;
+            height: 30px;
+            font-size: 14px;
+            line-height: 1;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .icon-btn:hover {
+            color: var(--text);
+        }
+
+        .layout-picker {
+            position: relative;
+        }
+
+        .layout-menu {
+            position: absolute;
+            right: 0;
+            top: 36px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            z-index: 10;
+            min-width: 140px;
+        }
+
+        .layout-option {
+            background: none;
+            border: none;
+            text-align: left;
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .layout-option:hover {
+            background: var(--bg);
+        }
+
+        .layout-option.active {
+            font-weight: 700;
+        }
+
+        .tab-bar {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .tab-btn.active {
+            color: var(--text);
+            border-color: var(--accent);
+        }
+
+        #content-sections.mode-side-by-side {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        #content-sections.mode-side-by-side .section {
+            margin-bottom: 0;
+        }
+
         .selector-row {
             display: flex;
             gap: 10px;
@@ -538,6 +633,18 @@
 </head>
 <body>
     <div class="container">
+        <!-- Layout mode picker -->
+        <div class="toolbar">
+            <div class="layout-picker">
+                <button type="button" id="layout-settings-btn" class="icon-btn" title="Layout settings">⚙</button>
+                <div class="layout-menu" id="layout-menu" style="display: none;">
+                    <button type="button" class="layout-option" data-mode="scroll">Scroll</button>
+                    <button type="button" class="layout-option" data-mode="tabs">Tabs</button>
+                    <button type="button" class="layout-option" data-mode="side-by-side">Side-by-side</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Club selector -->
         <div class="section" id="selector-section">
             <div class="selector-row">
@@ -553,55 +660,64 @@
         <!-- Error Messages -->
         <div id="error-container"></div>
 
-        <!-- Matches -->
-        <div class="section">
-            <div class="section-title-row">
-                <div class="section-title" id="matches-title">Matches</div>
-                <button type="button" id="toggle-selector-btn" class="toggle-selector-btn">Hide selector</button>
-            </div>
-            <div id="matches-list" class="empty-state">Pick a club above to see matches</div>
+        <!-- Tab bar (shown only in "tabs" layout mode) -->
+        <div class="tab-bar" id="tab-bar" style="display: none;">
+            <button type="button" class="tab-btn" data-tab="matches-section">Matches</button>
+            <button type="button" class="tab-btn" data-tab="league-section">League</button>
+            <button type="button" class="tab-btn" id="cl-tab-btn" data-tab="cl-section" style="display: none;">Champions League</button>
         </div>
 
-        <!-- League Info: table, position progress, form -->
-        <div class="section">
-            <div class="section-title" id="league-info-title">League</div>
-
-            <div class="subsection">
-                <div class="subtitle">Table</div>
-                <div id="league-table" class="empty-state">Pick a club above to see standings</div>
-                <div class="last-updated" id="last-updated"></div>
-            </div>
-
-            <div class="subsection">
-                <div class="subtitle">Position progress</div>
-                <div id="position-chart" class="empty-state position-chart-wrap">Pick a club above to see position history</div>
-            </div>
-
-            <div class="subsection">
-                <div class="subtitle">Form</div>
-                <div class="legend">
-                    <span class="legend-item"><span class="legend-swatch win"></span>Win</span>
-                    <span class="legend-item"><span class="legend-swatch draw"></span>Draw</span>
-                    <span class="legend-item"><span class="legend-swatch loss"></span>Loss</span>
-                    <span class="legend-item"><span class="legend-swatch"></span>Upcoming</span>
+        <div id="content-sections">
+            <!-- Matches -->
+            <div class="section" id="matches-section">
+                <div class="section-title-row">
+                    <div class="section-title" id="matches-title">Matches</div>
+                    <button type="button" id="toggle-selector-btn" class="toggle-selector-btn">Hide selector</button>
                 </div>
-                <div id="league-form" class="empty-state">Pick a club above to see recent form</div>
+                <div id="matches-list" class="empty-state">Pick a club above to see matches</div>
             </div>
-        </div>
 
-        <!-- Champions League Form Squares (hidden if not applicable) -->
-        <div class="section" id="cl-section" style="display: none;">
-            <div class="section-title">Champions League</div>
-            <div class="subsection">
-                <div class="subtitle">Form</div>
-                <div class="legend">
-                    <span class="legend-item"><span class="legend-swatch win"></span>Win</span>
-                    <span class="legend-item"><span class="legend-swatch draw"></span>Draw</span>
-                    <span class="legend-item"><span class="legend-swatch loss"></span>Loss</span>
-                    <span class="legend-item"><span class="legend-swatch"></span>Upcoming</span>
-                    <span class="legend-item"><span class="legend-swatch eliminated"></span>Out</span>
+            <!-- League Info: table, position progress, form -->
+            <div class="section" id="league-section">
+                <div class="section-title" id="league-info-title">League</div>
+
+                <div class="subsection">
+                    <div class="subtitle">Table</div>
+                    <div id="league-table" class="empty-state">Pick a club above to see standings</div>
+                    <div class="last-updated" id="last-updated"></div>
                 </div>
-                <div id="cl-form"></div>
+
+                <div class="subsection">
+                    <div class="subtitle">Position progress</div>
+                    <div id="position-chart" class="empty-state position-chart-wrap">Pick a club above to see position history</div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subtitle">Form</div>
+                    <div class="legend">
+                        <span class="legend-item"><span class="legend-swatch win"></span>Win</span>
+                        <span class="legend-item"><span class="legend-swatch draw"></span>Draw</span>
+                        <span class="legend-item"><span class="legend-swatch loss"></span>Loss</span>
+                        <span class="legend-item"><span class="legend-swatch"></span>Upcoming</span>
+                    </div>
+                    <div id="league-form" class="empty-state">Pick a club above to see recent form</div>
+                </div>
+            </div>
+
+            <!-- Champions League Form Squares (hidden if not applicable) -->
+            <div class="section" id="cl-section" style="display: none;">
+                <div class="section-title">Champions League</div>
+                <div class="subsection">
+                    <div class="subtitle">Form</div>
+                    <div class="legend">
+                        <span class="legend-item"><span class="legend-swatch win"></span>Win</span>
+                        <span class="legend-item"><span class="legend-swatch draw"></span>Draw</span>
+                        <span class="legend-item"><span class="legend-swatch loss"></span>Loss</span>
+                        <span class="legend-item"><span class="legend-swatch"></span>Upcoming</span>
+                        <span class="legend-item"><span class="legend-swatch eliminated"></span>Out</span>
+                    </div>
+                    <div id="cl-form"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -615,12 +731,17 @@
         const backendUrl = 'http://localhost:3000';
 
         const STORAGE_KEY = 'football-widget-selection';
+        const LAYOUT_STORAGE_KEY = 'football-widget-layout-mode';
+        const CONTENT_SECTION_IDS = ['matches-section', 'league-section', 'cl-section'];
 
         let currentTeamId = null;
         let currentCompetition = null;
         let currentTeamShortName = null;
         let leaguesByCountry = {};
         let competitionToCountry = {};
+        let layoutMode = 'scroll';
+        let activeTabId = 'matches-section';
+        let clApplicable = false;
 
         function saveSelection(competition, teamId) {
             try {
@@ -642,6 +763,82 @@
         function setSelectorVisible(visible) {
             document.getElementById('selector-section').style.display = visible ? '' : 'none';
             document.getElementById('toggle-selector-btn').textContent = visible ? 'Hide selector' : 'Change club';
+        }
+
+        function saveLayoutMode(mode) {
+            try {
+                localStorage.setItem(LAYOUT_STORAGE_KEY, mode);
+            } catch (e) {
+                // localStorage unavailable — layout choice just won't persist
+            }
+        }
+
+        function loadLayoutMode() {
+            try {
+                const saved = localStorage.getItem(LAYOUT_STORAGE_KEY);
+                return ['scroll', 'tabs', 'side-by-side'].includes(saved) ? saved : 'scroll';
+            } catch (e) {
+                return 'scroll';
+            }
+        }
+
+        // Single source of truth reconciling layout mode, active tab, and
+        // whether Champions League is applicable for the current club.
+        function refreshLayout() {
+            const contentSections = document.getElementById('content-sections');
+            const tabBar = document.getElementById('tab-bar');
+            const clTabBtn = document.getElementById('cl-tab-btn');
+
+            contentSections.classList.toggle('mode-side-by-side', layoutMode === 'side-by-side');
+            tabBar.style.display = layoutMode === 'tabs' ? 'flex' : 'none';
+            clTabBtn.style.display = clApplicable ? '' : 'none';
+
+            if (activeTabId === 'cl-section' && !clApplicable) {
+                activeTabId = 'matches-section';
+            }
+
+            CONTENT_SECTION_IDS.forEach(id => {
+                const el = document.getElementById(id);
+                if (id === 'cl-section' && !clApplicable) {
+                    el.style.display = 'none';
+                    return;
+                }
+                el.style.display = (layoutMode === 'tabs' && id !== activeTabId) ? 'none' : '';
+            });
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === activeTabId);
+            });
+            document.querySelectorAll('.layout-option').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === layoutMode);
+            });
+        }
+
+        function initLayoutControls() {
+            layoutMode = loadLayoutMode();
+
+            document.getElementById('layout-settings-btn').addEventListener('click', () => {
+                const menu = document.getElementById('layout-menu');
+                menu.style.display = menu.style.display === 'none' ? 'flex' : 'none';
+            });
+
+            document.querySelectorAll('.layout-option').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    layoutMode = btn.dataset.mode;
+                    saveLayoutMode(layoutMode);
+                    document.getElementById('layout-menu').style.display = 'none';
+                    refreshLayout();
+                });
+            });
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    activeTabId = btn.dataset.tab;
+                    refreshLayout();
+                });
+            });
+
+            refreshLayout();
         }
 
         async function initSelectors() {
@@ -978,15 +1175,14 @@
         }
 
         function renderClForm(championsLeague) {
-            const section = document.getElementById('cl-section');
             const container = document.getElementById('cl-form');
 
-            if (!championsLeague || !championsLeague.phases || championsLeague.phases.length === 0) {
-                section.style.display = 'none';
+            clApplicable = !!(championsLeague && championsLeague.phases && championsLeague.phases.length > 0);
+            if (!clApplicable) {
+                refreshLayout();
                 return;
             }
 
-            section.style.display = '';
             container.innerHTML = championsLeague.phases.map(phase => `
                 <div class="phase-row">
                     <div class="phase-label">${phase.label}</div>
@@ -997,6 +1193,7 @@
             championsLeague.phases.forEach(phase => {
                 renderSquares(document.getElementById(`phase-${phase.stage}`), phase.squares);
             });
+            refreshLayout();
         }
 
         function updateLastUpdated() {
@@ -1009,6 +1206,7 @@
             errorContainer.innerHTML = `<div class="error">${message}</div>`;
         }
 
+        initLayoutControls();
         initSelectors();
 
         // Refresh the currently selected club's data every 5 minutes
