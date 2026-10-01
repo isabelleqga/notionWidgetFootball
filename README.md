@@ -4,7 +4,7 @@
 
 A real-time widget for Notion (or any embeddable page) showing matches, standings, position history, and recent form for a football club you pick from a dropdown — any club across 9 domestic leagues in 8 countries, via [football-data.org](https://www.football-data.org/).
 
-<p align="center"><img src="img/wdiget-side-by-side.png" alt="Football Club Widget in the side-by-side layout, with the settings menu open" width="100%"></p>
+<p align="center"><img src="img/widget-side-by-side.png" alt="Football Club Widget in the side-by-side layout, with the settings menu open" width="100%"></p>
 
 ## 📦 What's Included
 
