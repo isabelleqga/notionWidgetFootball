@@ -253,7 +253,7 @@
             display: contents;
         }
 
-        #content-sections.mode-side-by-side #league-info-title {
+        #content-sections.mode-side-by-side #league-section-row {
             display: none;
         }
 
@@ -763,10 +763,16 @@
                  mode this splits into 2 independent cards (.league-column);
                  in Scroll/Tabs it's one unified "League" section. -->
             <div class="section" id="league-section">
-                <div class="section-title" id="league-info-title">League</div>
+                <div class="section-title-row" id="league-section-row">
+                    <div class="section-title" id="league-info-title">League</div>
+                </div>
 
                 <div class="league-column" id="league-col-table">
-                    <div class="subsection">
+                    <!-- Shown only when this card hosts the settings buttons in side-by-side mode -->
+                    <div class="section-title-row" id="league-col-table-row" style="display: none;">
+                        <div class="section-title" id="league-col-table-title">League</div>
+                    </div>
+                    <div class="subsection" id="table-subsection">
                         <div class="subtitle">Table</div>
                         <div id="league-table" class="empty-state">Pick a club above to see standings</div>
                         <div class="last-updated" id="last-updated"></div>
@@ -774,6 +780,9 @@
                 </div>
 
                 <div class="league-column" id="league-col-position-form">
+                    <div class="section-title-row" id="league-col-pf-row" style="display: none;">
+                        <div class="section-title" id="league-col-pf-title">League</div>
+                    </div>
                     <div class="subsection" id="position-subsection">
                         <div class="subtitle">Position progress</div>
                         <div id="position-chart" class="empty-state position-chart-wrap">Pick a club above to see position history</div>
@@ -794,7 +803,9 @@
 
             <!-- Champions League Form Squares (hidden if not applicable) -->
             <div class="section" id="cl-section" style="display: none;">
-                <div class="section-title">Champions League</div>
+                <div class="section-title-row" id="cl-section-row">
+                    <div class="section-title" id="cl-title">Champions League</div>
+                </div>
                 <div class="subsection">
                     <div class="subtitle">Form</div>
                     <div class="legend">
@@ -830,6 +841,7 @@
         let layoutMode = 'scroll';
         let activeTabId = 'matches-section';
         let clApplicable = false;
+        let leagueDisplayName = 'League';
         let lastPositionChartArgs = null;
         let positionChartWasVisible = true;
 
@@ -911,17 +923,16 @@
             tabBar.style.display = layoutMode === 'tabs' ? 'flex' : 'none';
             clTabBtn.style.display = clApplicable ? '' : 'none';
 
-            // User-chosen section visibility. Matches keeps its card (it hosts
-            // the ⚙ / selector buttons) and only hides its list.
+            // User-chosen section visibility. Never allow an empty widget.
+            if (effectiveSections().length === 0) sectionPrefs.matches = true;
             const leagueVisible = sectionPrefs.table || sectionPrefs.position || sectionPrefs.form;
             const clVisible = clApplicable && sectionPrefs.ucl;
             const sectionAvailable = {
-                'matches-section': true,
+                'matches-section': sectionPrefs.matches,
                 'league-section': leagueVisible,
                 'cl-section': clVisible
             };
 
-            document.getElementById('matches-list').style.display = sectionPrefs.matches ? '' : 'none';
             document.getElementById('league-col-table').style.display = sectionPrefs.table ? '' : 'none';
             document.getElementById('position-subsection').style.display = sectionPrefs.position ? '' : 'none';
             document.getElementById('form-subsection').style.display = sectionPrefs.form ? '' : 'none';
@@ -933,12 +944,13 @@
                 .map(id => document.getElementById(id))
                 .filter(el => el.style.display !== 'none');
             posFormVisible.forEach((el, i) => { el.style.marginTop = i === 0 ? '0' : ''; });
+            document.getElementById('table-subsection').style.marginTop = '0';
             // Same for the 2nd League column: with Table hidden it becomes the first.
             document.getElementById('league-col-position-form').style.marginTop =
                 sectionPrefs.table ? '' : '0';
 
             if (!sectionAvailable[activeTabId]) {
-                activeTabId = 'matches-section';
+                activeTabId = CONTENT_SECTION_IDS.find(id => sectionAvailable[id]);
             }
 
             CONTENT_SECTION_IDS.forEach(id => {
@@ -950,8 +962,12 @@
                 el.style.display = (layoutMode === 'tabs' && id !== activeTabId) ? 'none' : '';
             });
 
+            document.querySelector('.tab-btn[data-tab="matches-section"]').style.display = sectionPrefs.matches ? '' : 'none';
             document.querySelector('.tab-btn[data-tab="league-section"]').style.display = leagueVisible ? '' : 'none';
             clTabBtn.style.display = clVisible ? '' : 'none';
+
+            placeSettingsButtons(isSideBySide);
+            updateSectionBoxes();
 
             // The chart sizes itself from its container's width, which is 0
             // while hidden — redraw once it becomes visible again.
@@ -967,6 +983,57 @@
             });
             document.querySelectorAll('.layout-option').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.mode === layoutMode);
+            });
+        }
+
+        // The settings/selector buttons and the "• club" suffix live in the title
+        // row of the first card actually on screen, so hiding Matches (or
+        // switching tabs) moves them to whatever is shown first.
+        function placeSettingsButtons(isSideBySide) {
+            const shown = id => document.getElementById(id).style.display !== 'none';
+            const hosts = {
+                matches: { titleId: 'matches-title', base: 'Matches' },
+                league: { titleId: 'league-info-title', base: leagueDisplayName },
+                table: { titleId: 'league-col-table-title', base: leagueDisplayName, rowId: 'league-col-table-row' },
+                pf: { titleId: 'league-col-pf-title', base: leagueDisplayName, rowId: 'league-col-pf-row' },
+                cl: { titleId: 'cl-title', base: 'Champions League' }
+            };
+
+            let host;
+            if (shown('matches-section')) host = hosts.matches;
+            else if (shown('league-section')) {
+                host = !isSideBySide ? hosts.league : (sectionPrefs.table ? hosts.table : hosts.pf);
+            } else host = hosts.cl;
+
+            Object.values(hosts).forEach(h => {
+                const isHost = h === host;
+                document.getElementById(h.titleId).textContent =
+                    h.base + (isHost && currentTeamShortName ? ` • ${currentTeamShortName}` : '');
+                if (h.rowId) document.getElementById(h.rowId).style.display = isHost ? '' : 'none';
+            });
+
+            const actions = document.querySelector('.title-row-actions');
+            const hostRow = document.getElementById(host.titleId).parentElement;
+            if (actions.parentElement !== hostRow) hostRow.appendChild(actions);
+        }
+
+        // Sections that are actually on screen (UCL only counts when applicable).
+        function effectiveSections() {
+            return SECTION_KEYS.filter(k => sectionPrefs[k] && (k !== 'ucl' || clApplicable));
+        }
+
+        // At least one section must stay on: disable the last checked box.
+        function updateSectionBoxes() {
+            const active = effectiveSections();
+            document.querySelectorAll('.section-option input').forEach(box => {
+                const key = box.dataset.section;
+                box.checked = sectionPrefs[key];
+                // UCL Form only makes sense for clubs in the Champions League.
+                if (key === 'ucl') box.parentElement.style.display = clApplicable ? '' : 'none';
+                const isLast = active.length === 1 && active[0] === key;
+                box.disabled = isLast;
+                box.parentElement.title = isLast ? 'At least one section must stay visible' : '';
+                box.parentElement.style.opacity = isLast ? '0.5' : '';
             });
         }
 
@@ -1113,8 +1180,8 @@
 
                 currentTeamShortName = data.team.shortName || data.team.name;
 
-                document.getElementById('matches-title').textContent = `Matches • ${currentTeamShortName}`;
-                document.getElementById('league-info-title').textContent = data.league.name;
+                leagueDisplayName = data.league.name;
+                refreshLayout();
 
                 const allMatches = [
                     ...(data.league.matches || []),
