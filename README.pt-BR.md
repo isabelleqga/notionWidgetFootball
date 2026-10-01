@@ -4,6 +4,8 @@
 
 Um widget em tempo real para o Notion (ou qualquer página incorporável) que mostra partidas, classificação, histórico de posições e forma recente de um clube de futebol escolhido em um menu suspenso — qualquer clube entre 9 ligas nacionais em 8 países, via [football-data.org](https://www.football-data.org/).
 
+<p align="center"><img src="img/wdiget-side-by-side.png" alt="Football Club Widget no layout lado a lado, com o menu de configurações aberto" width="100%"></p>
+
 ## 📦 O Que Está Incluído
 
 | Arquivo | Finalidade |
