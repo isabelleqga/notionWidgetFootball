@@ -169,6 +169,41 @@
             font-weight: 700;
         }
 
+        .menu-heading {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 6px 8px 2px;
+        }
+
+        .menu-heading:not(:first-child) {
+            border-top: 1px solid var(--border);
+            margin-top: 4px;
+            padding-top: 8px;
+        }
+
+        .section-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--text);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .section-option:hover {
+            background: var(--bg);
+        }
+
+        .section-option input {
+            margin: 0;
+            cursor: pointer;
+        }
+
         .tab-bar {
             display: flex;
             gap: 6px;
@@ -707,9 +742,16 @@
                         <div class="layout-picker">
                             <button type="button" id="layout-settings-btn" class="icon-btn" title="Layout settings">⚙</button>
                             <div class="layout-menu" id="layout-menu" style="display: none;">
+                                <div class="menu-heading">Layout</div>
                                 <button type="button" class="layout-option" data-mode="scroll">Scroll</button>
                                 <button type="button" class="layout-option" data-mode="tabs">Tabs</button>
                                 <button type="button" class="layout-option" data-mode="side-by-side">Side-by-side</button>
+                                <div class="menu-heading">Sections</div>
+                                <label class="section-option"><input type="checkbox" data-section="matches"> Matches</label>
+                                <label class="section-option"><input type="checkbox" data-section="table"> League Table</label>
+                                <label class="section-option"><input type="checkbox" data-section="position"> League Position</label>
+                                <label class="section-option"><input type="checkbox" data-section="form"> League Form</label>
+                                <label class="section-option"><input type="checkbox" data-section="ucl"> UCL Form</label>
                             </div>
                         </div>
                     </div>
@@ -732,12 +774,12 @@
                 </div>
 
                 <div class="league-column" id="league-col-position-form">
-                    <div class="subsection">
+                    <div class="subsection" id="position-subsection">
                         <div class="subtitle">Position progress</div>
                         <div id="position-chart" class="empty-state position-chart-wrap">Pick a club above to see position history</div>
                     </div>
 
-                    <div class="subsection">
+                    <div class="subsection" id="form-subsection">
                         <div class="subtitle">Form</div>
                         <div class="legend">
                             <span class="legend-item"><span class="legend-swatch win"></span>Win</span>
@@ -788,6 +830,33 @@
         let layoutMode = 'scroll';
         let activeTabId = 'matches-section';
         let clApplicable = false;
+        let lastPositionChartArgs = null;
+        let positionChartWasVisible = true;
+
+        const SECTIONS_STORAGE_KEY = 'football-widget-sections';
+        const SECTION_KEYS = ['matches', 'table', 'position', 'form', 'ucl'];
+        let sectionPrefs = { matches: true, table: true, position: true, form: true, ucl: true };
+
+        function saveSectionPrefs() {
+            try {
+                localStorage.setItem(SECTIONS_STORAGE_KEY, JSON.stringify(sectionPrefs));
+            } catch (e) {
+                // localStorage unavailable — section choice just won't persist
+            }
+        }
+
+        function loadSectionPrefs() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(SECTIONS_STORAGE_KEY));
+                if (saved && typeof saved === 'object') {
+                    SECTION_KEYS.forEach(k => {
+                        if (typeof saved[k] === 'boolean') sectionPrefs[k] = saved[k];
+                    });
+                }
+            } catch (e) {
+                // keep defaults (everything shown)
+            }
+        }
 
         function saveSelection(competition, teamId) {
             try {
@@ -842,18 +911,56 @@
             tabBar.style.display = layoutMode === 'tabs' ? 'flex' : 'none';
             clTabBtn.style.display = clApplicable ? '' : 'none';
 
-            if (activeTabId === 'cl-section' && !clApplicable) {
+            // User-chosen section visibility. Matches keeps its card (it hosts
+            // the ⚙ / selector buttons) and only hides its list.
+            const leagueVisible = sectionPrefs.table || sectionPrefs.position || sectionPrefs.form;
+            const clVisible = clApplicable && sectionPrefs.ucl;
+            const sectionAvailable = {
+                'matches-section': true,
+                'league-section': leagueVisible,
+                'cl-section': clVisible
+            };
+
+            document.getElementById('matches-list').style.display = sectionPrefs.matches ? '' : 'none';
+            document.getElementById('league-col-table').style.display = sectionPrefs.table ? '' : 'none';
+            document.getElementById('position-subsection').style.display = sectionPrefs.position ? '' : 'none';
+            document.getElementById('form-subsection').style.display = sectionPrefs.form ? '' : 'none';
+            document.getElementById('league-col-position-form').style.display =
+                (sectionPrefs.position || sectionPrefs.form) ? '' : 'none';
+            // .subsection:first-of-type counts hidden siblings, so reset the
+            // top margin on whichever subsection is first among the visible ones.
+            const posFormVisible = ['position-subsection', 'form-subsection']
+                .map(id => document.getElementById(id))
+                .filter(el => el.style.display !== 'none');
+            posFormVisible.forEach((el, i) => { el.style.marginTop = i === 0 ? '0' : ''; });
+            // Same for the 2nd League column: with Table hidden it becomes the first.
+            document.getElementById('league-col-position-form').style.marginTop =
+                sectionPrefs.table ? '' : '0';
+
+            if (!sectionAvailable[activeTabId]) {
                 activeTabId = 'matches-section';
             }
 
             CONTENT_SECTION_IDS.forEach(id => {
                 const el = document.getElementById(id);
-                if (id === 'cl-section' && !clApplicable) {
+                if (!sectionAvailable[id]) {
                     el.style.display = 'none';
                     return;
                 }
                 el.style.display = (layoutMode === 'tabs' && id !== activeTabId) ? 'none' : '';
             });
+
+            document.querySelector('.tab-btn[data-tab="league-section"]').style.display = leagueVisible ? '' : 'none';
+            clTabBtn.style.display = clVisible ? '' : 'none';
+
+            // The chart sizes itself from its container's width, which is 0
+            // while hidden — redraw once it becomes visible again.
+            const positionShown = sectionPrefs.position && leagueVisible &&
+                document.getElementById('league-section').style.display !== 'none';
+            if (positionShown && !positionChartWasVisible && lastPositionChartArgs) {
+                renderPositionChart(...lastPositionChartArgs);
+            }
+            positionChartWasVisible = positionShown;
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.tab === activeTabId);
@@ -865,6 +972,16 @@
 
         function initLayoutControls() {
             layoutMode = loadLayoutMode();
+            loadSectionPrefs();
+
+            document.querySelectorAll('.section-option input').forEach(box => {
+                box.checked = sectionPrefs[box.dataset.section];
+                box.addEventListener('change', () => {
+                    sectionPrefs[box.dataset.section] = box.checked;
+                    saveSectionPrefs();
+                    refreshLayout();
+                });
+            });
 
             document.getElementById('layout-settings-btn').addEventListener('click', () => {
                 const menu = document.getElementById('layout-menu');
@@ -1141,6 +1258,7 @@
         }
 
         function renderPositionChart(history, teamCount, relegationZone) {
+            lastPositionChartArgs = [history, teamCount, relegationZone];
             const container = document.getElementById('position-chart');
             container.className = 'position-chart-wrap';
 

@@ -108,6 +108,7 @@ De qualquer forma: escolha um clube — sua escolha é lembrada naquele navegado
 - Forma recente em uma grade de quadrados de vitória/empate/derrota/próximo jogo
 - A escolha do clube é lembrada por navegador (`localStorage`); os menus suspensos de país/clube podem ser ocultados depois que você escolhe um clube (ficam ocultos por padrão depois disso) e podem ser reabertos a qualquer momento pelo link "Change club"
 - Um seletor de layout (⚙ ao lado de "Change club") alterna entre **Scroll** (padrão), **Tabs** (uma seção por vez) e **Side-by-side** (seções como cartões lado a lado, esticando para preencher a largura do embed e dividindo a Liga em um cartão de Tabela + um cartão de Posição/Forma) — lembrado por navegador
+- O mesmo menu ⚙ tem caixas de **Sections** (Matches, League Table, League Position, League Form, UCL Form) para escolher quais partes do widget aparecem — lembrado por navegador
 - Segue a aparência padrão do próprio Notion — mesma fonte e a mesma paleta de cores clara/escura usada nas páginas do Notion
 - Compatível com tema claro/escuro, totalmente responsivo — inclusive em colunas estreitas do Notion (a partir de ~240px, por exemplo, uma página dividida em 3 ou mais colunas)
 
